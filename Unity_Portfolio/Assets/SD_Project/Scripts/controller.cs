@@ -1,8 +1,4 @@
-﻿//
-// Mecanimのアニメーションデータが、原点で移動しない場合の Rigidbody付きコントローラ
-// サンプル
-// 2014/03/13 N.Kobyasahi
-//
+﻿
 using UnityEngine;
 using System.Collections;
 
@@ -21,7 +17,7 @@ public class controller : MonoBehaviour
 	public float forwardSpeed = 7.0f;
 	public float backwardSpeed = 2.0f;
 	public float rotateSpeed = 2.0f;
-	public float jumpPower = 7.0f; 
+	public float jumpPower = 3.0f; 
 	private CapsuleCollider col;
 	private Rigidbody rb;
 	private Vector3 velocity;
@@ -29,8 +25,9 @@ public class controller : MonoBehaviour
 	private Vector3 orgVectColCenter;
 	private Animator anim;						
 	private AnimatorStateInfo currentBaseState;			
-	private GameObject cameraObject;	
-	
+	private GameObject cameraObject;
+
+    float jumpCount = 0; //점프카운터
 
 	static int idle_cState = Animator.StringToHash("Base Layer.Idle_C");
 	static int idle_aState = Animator.StringToHash("Base Layer.Idle_A");
@@ -51,9 +48,26 @@ public class controller : MonoBehaviour
 		orgColHight = col.height;
 		orgVectColCenter = col.center;
 	}
-	
-	
-	void FixedUpdate ()
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        int layer = 1 << 8;
+        if(collision.gameObject.layer == layer)
+        {
+            jumpCount = 0;
+        }
+    }
+    private void Update()
+    {
+        Debug.Log(jumpCount);
+        //Ray jumpRay = new Ray(transform.position, Vector3.down);
+        //RaycastHit hit;
+        //if(Physics.Raycast(jumpRay,out hit,1f,1<<8))
+        //{
+        //    jumpCount = 0;
+        //}
+    }
+    void FixedUpdate ()
 	{
 		float h = Input.GetAxis("Horizontal");				
 		float v = Input.GetAxis("Vertical");				
@@ -73,25 +87,29 @@ public class controller : MonoBehaviour
 			velocity *= backwardSpeed;
 		}
 
-		if (Input.GetButtonDown("Jump")) {	
-			if (currentBaseState.nameHash == locoState){
+		if (Input.GetButtonDown("Jump") ) {
+            if (jumpCount < 2)
+            {
+                
 				if(!anim.IsInTransition(0))
 				{
-					rb.AddForce(Vector3.up * jumpPower, ForceMode.VelocityChange);
+                    jumpCount++;
+                    rb.AddForce(Vector3.up * jumpPower, ForceMode.VelocityChange);
 					anim.SetBool("Jump", true);
 				}
 			}
 		}
-		
+        
 		
 		transform.localPosition += velocity * Time.fixedDeltaTime;
 		transform.Rotate(0, h * rotateSpeed, 0);	
-		if (currentBaseState.nameHash == locoState){
+		if (currentBaseState.fullPathHash == locoState){
 			if(useCurves){
 				resetCollider();
 			}
-		}
-		if(currentBaseState.nameHash == jumpState)
+            
+        }
+		if(currentBaseState.fullPathHash == jumpState)
 		{
 			cameraObject.SendMessage("setCameraPositionJumpView");	
 			if(!anim.IsInTransition(0))
@@ -114,17 +132,20 @@ public class controller : MonoBehaviour
 							col.center = new Vector3(0, adjCenterY, 0);
 						}
 						else{
-							
-							resetCollider();
+                            
+                            resetCollider();
 						}
+                        
 					}
-				}
+                    
+                }
+                
 				anim.SetBool("Jump", false);
 			}
 		}
 
 		
-		else if (currentBaseState.nameHash == idle_cState)
+		else if (currentBaseState.fullPathHash == idle_cState)
 		{
 			if(useCurves){
 				resetCollider();
@@ -137,7 +158,7 @@ public class controller : MonoBehaviour
 			
 			
 		}
-		else if (currentBaseState.nameHash == idle_aState)
+		else if (currentBaseState.fullPathHash == idle_aState)
 		{
 			if(useCurves){
 				resetCollider();
@@ -147,7 +168,7 @@ public class controller : MonoBehaviour
 				anim.SetBool("Cute1", true);
 			}
 		}
-		else if (currentBaseState.nameHash == cute1State)
+		else if (currentBaseState.fullPathHash == cute1State)
 		{
 			
 			if(!anim.IsInTransition(0))
@@ -158,15 +179,7 @@ public class controller : MonoBehaviour
 
 	}
 	
-	void OnGUI()
-	{
-		GUI.Box(new Rect(Screen.width -260, 10 ,250 ,150), "Interaction");
-		GUI.Label(new Rect(Screen.width -245,30,250,30),"Up/Down Arrow : Go Forwald/Go Back");
-		GUI.Label(new Rect(Screen.width -245,50,250,30),"Left/Right Arrow : Turn Left/Turn Right");
-		GUI.Label(new Rect(Screen.width -245,70,250,30),"Hit Space key while Running : Jump");
-		GUI.Label(new Rect(Screen.width -245,110,250,30),"Left Control : Front Camera");
-		GUI.Label(new Rect(Screen.width -245,130,250,30),"Alt : LookAt Camera"); 
-	}
+	
 	void resetCollider()
 	{
 		
