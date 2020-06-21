@@ -5,11 +5,12 @@ using UnityEngine;
 public class FireBall : MonoBehaviour
 {
     public GameObject explosion;
-    float speed = 5.0f;
-    
+    float speed = 20.0f;
+    //카메라흔들기
+    private Shake shake;
     void Start()
     {
-       
+        shake = GameObject.Find("CameraRig").GetComponent<Shake>();
     }
 
     void Update()
@@ -18,8 +19,16 @@ public class FireBall : MonoBehaviour
     }
     private void OnCollisionEnter(Collision collision)
     {
+        if (collision.gameObject.tag == "Enemy")
+        {
+            EnemyFSM ef = collision.gameObject.GetComponent<EnemyFSM>();
+            ef.hitDamage(5);
+        }
+        StartCoroutine(shake.ShakeCamera());
+        Destroy(gameObject);
         GameObject exp = Instantiate(explosion);
         exp.transform.position = collision.transform.position;
         Destroy(exp, 1f);
+        
     }
 }

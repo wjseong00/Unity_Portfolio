@@ -41,7 +41,34 @@ public class PlayerMove : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        float h = Input.GetAxis("Horizontal");
+        float v = Input.GetAxis("Vertical");
+        Vector3 dir = new Vector3(0, 0, v);
+        dir = transform.TransformDirection(dir);
+
+        velocityY += gravity * Time.deltaTime;
+        dir.y = velocityY;
+
+        cc.Move(dir * frontSpeed * Time.deltaTime);
+        //if (cc.collisionFlags == CollisionFlags.Below) //땅에 닿았냐?
+        if (cc.isGrounded) //땅에 닿았냐?
+        {
+            
+            anim.SetBool("Jump", false);
+            velocityY = 0;
+            jumpCount = 0;
+        }
+        if (Input.GetButtonDown("Jump") && jumpCount < 2)
+        {
+            
+            //cameraObject.SendMessage("setCameraPositionJumpView");
+            if (!anim.IsInTransition(0))
+            {
+                anim.SetBool("Jump", true);
+                jumpCount++;
+                velocityY = jumpSpeed;
+            }
+        }
     }
     
     private void FixedUpdate()
@@ -52,32 +79,9 @@ public class PlayerMove : MonoBehaviour
         anim.SetFloat("Direction", h);
         anim.speed = aniSpeed;
         currentBaseState = anim.GetCurrentAnimatorStateInfo(0);
-        //float h = Input.GetAxis("Horizontal");
-        //float v = Input.GetAxis("Vertical");
+        
 
-        Vector3 dir = new Vector3(0, 0, v);
-        dir = transform.TransformDirection(dir);
-
-        velocityY += gravity * Time.deltaTime;
-        dir.y = velocityY;
-
-        cc.Move(dir * frontSpeed * Time.deltaTime);
-        if (cc.collisionFlags == CollisionFlags.Below) //땅에 닿았냐?
-        {
-            anim.SetBool("Jump", false);
-            velocityY = 0;
-            jumpCount = 0;
-        }
-        if (Input.GetButtonDown("Jump") && jumpCount < 2)
-        {
-            //cameraObject.SendMessage("setCameraPositionJumpView");
-            if (!anim.IsInTransition(0))
-            {
-                anim.SetBool("Jump", true);
-                jumpCount++;
-                velocityY = jumpSpeed;
-            }
-        }
+        
 
 
         velocity = new Vector3(0, 0, v);

@@ -18,7 +18,7 @@ public class NormalMissile : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+       
         Collider[] cols = Physics.OverlapSphere(transform.position, 1f,1<<11);
         if (cols.Length <= 0)
         {
@@ -54,8 +54,14 @@ public class NormalMissile : MonoBehaviour
     private void OnCollisionEnter(Collision collision)
     {
         Destroy(gameObject);
+        
         GameObject exp = Instantiate(explosion);
         exp.transform.position =transform.position;
         Destroy(exp, 1f);
+        if(collision.gameObject.tag =="Enemy")
+        {
+            EnemyFSM ef = collision.gameObject.GetComponent<EnemyFSM>();
+            ef.hitDamage(1);
+        }
     }
 }

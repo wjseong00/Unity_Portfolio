@@ -17,6 +17,10 @@ public class IceWall : MonoBehaviour
     }
     private void OnCollisionEnter(Collision collision)
     {
-        
+        if (collision.gameObject.tag == "Enemy")
+        {
+            EnemyFSM ef = collision.gameObject.GetComponent<EnemyFSM>();
+            ef.hitDamage(1);
+        }
     }
 }
