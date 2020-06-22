@@ -18,10 +18,15 @@ public class IceWall : MonoBehaviour
     
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.tag == "Enemy")
+        if (other.gameObject.name.Contains("Witch"))
         {
             EnemyFSM ef = other.gameObject.GetComponent<EnemyFSM>();
-            ef.hitDamage(1);
+            ef.hitDamage(10);
+        }
+        else if (other.gameObject.name.Contains("Mushroom"))
+        {
+            Enemy2FSM ef = other.gameObject.GetComponent<Enemy2FSM>();
+            ef.hitDamage(10);
         }
     }
 }

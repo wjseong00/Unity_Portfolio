@@ -19,9 +19,14 @@ public class FireBall : MonoBehaviour
     }
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.tag == "Enemy")
+        if (collision.gameObject.name.Contains("Witch"))
         {
             EnemyFSM ef = collision.gameObject.GetComponent<EnemyFSM>();
+            ef.hitDamage(5);
+        }
+        else if (collision.gameObject.name.Contains("Mushroom"))
+        {
+            Enemy2FSM ef = collision.gameObject.GetComponent<Enemy2FSM>();
             ef.hitDamage(5);
         }
         StartCoroutine(shake.ShakeCamera());

@@ -67,9 +67,14 @@ public class NormalMissile : MonoBehaviour
         GameObject exp = Instantiate(explosion);
         exp.transform.position =transform.position;
         Destroy(exp, 1f);
-        if(collision.gameObject.tag =="Enemy")
+        if(collision.gameObject.name.Contains("Witch"))
         {
             EnemyFSM ef = collision.gameObject.GetComponent<EnemyFSM>();
+            ef.hitDamage(1);
+        }
+        else if (collision.gameObject.name.Contains("Mushroom"))
+        {
+            Enemy2FSM ef = collision.gameObject.GetComponent<Enemy2FSM>();
             ef.hitDamage(1);
         }
     }
