@@ -12,21 +12,26 @@ public class PlayerAttack : MonoBehaviour,IPointerDownHandler, IPointerUpHandler
     public GameObject iceAttackMotion;
     public GameObject normalAttackMotion;
     private Animator anim;
-
     
-
-
     float minDistance = 9999f; //가장 가까이있는 타겟 구하기
     Vector3 dir;        //타겟의 방향
     Vector3 target;     //타겟의 벡터값
 
-    
+    public List<GameObject> normalMissile;
+    int missileSize = 20;
+    int missileIndex = 0;
     // Start is called before the first frame update
     void Start()
     {
         anim = GetComponent<Animator>();
+        normalMissile = new List<GameObject>();
+        for (int i = 0; i < missileSize; i++)
+        {
+            GameObject bullet = Instantiate(normalAttack, GameObject.Find("PlayerMissile").transform);
+            bullet.SetActive(false);
+            normalMissile.Add(bullet);
+        }
 
-        
     }
 
     // Update is called once per frame
@@ -76,7 +81,7 @@ public class PlayerAttack : MonoBehaviour,IPointerDownHandler, IPointerUpHandler
                     }
                 }
                 ice.transform.position = target;
-                Destroy(ice, 1f);
+                //Destroy(ice, 1f);
 
 
             }
@@ -102,7 +107,6 @@ public class PlayerAttack : MonoBehaviour,IPointerDownHandler, IPointerUpHandler
                 motion.transform.position = transform.position + new Vector3(0, 0.3f, 0);
                 Destroy(motion, 1f);
                 GameObject fire = Instantiate(fireBall);
-                
                 for (int i = 0; i < cols.Length; i++)
                 {
 
@@ -146,14 +150,18 @@ public class PlayerAttack : MonoBehaviour,IPointerDownHandler, IPointerUpHandler
         if(Input.GetMouseButtonDown(0))
         {
             anim.SetBool("NormalAttack", true);
-            GameObject missile = Instantiate(normalAttack);
-     
+            
+            normalMissile[missileIndex].SetActive(true);
+            normalMissile[missileIndex].transform.position = attackPos.position;
+            normalMissile[missileIndex].transform.rotation = attackPos.rotation;
+            missileIndex++;
+
+            if (missileIndex >= missileSize) missileIndex = 0;
             GameObject motion = Instantiate(normalAttackMotion,GameObject.Find("Player").transform);
-            missile.transform.position = attackPos.position;
-            missile.transform.rotation = attackPos.rotation;
+            
             motion.transform.position = transform.position + new Vector3(0,0.3f,0);
 
-            Destroy(missile, 3f);
+            
             Destroy(motion, 1f);
             
         }

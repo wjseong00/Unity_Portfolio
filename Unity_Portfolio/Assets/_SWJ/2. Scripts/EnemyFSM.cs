@@ -55,14 +55,16 @@ public class EnemyFSM : MonoBehaviour
     private Canvas uiCanvas;
     private Image hpBarImage;
 
+    
+
     //몬스터 일반변수
-    float hp = 10f;//체력
-    float initHp = 10f;
+    float hp = 100f;//체력
+    float initHp = 100f;
     int att = 5;//공격력
     float speed = 5.0f;//이동속도
 
     //공격 딜레이
-    float attTime = 2f; //2초에 한번 공격
+    float attTime = 1f; //2초에 한번 공격
     float timer = 0f; //타이머
 
     void Start()
@@ -204,8 +206,7 @@ public class EnemyFSM : MonoBehaviour
                 transform.rotation = Quaternion.LookRotation(dir);
                 Invoke("delay", 0.5f);
                 
-                //플레이어의 필요한 스크립트 컴포넌트를 가져와서 데미지를 주면 된다
-                //player.GetComponent<PlayerMove>().hitMamage(att);
+                
 
                 //타이머 초기화
                 timer = 0f;
@@ -259,6 +260,7 @@ public class EnemyFSM : MonoBehaviour
         if (hp <= 0)
         {
             hpBarImage.GetComponentsInParent<Image>()[1].color = Color.clear;
+            anim.SetBool("Damage", false);
             anim.SetTrigger("Die");
             state = EnemyState.Die;
             print("상태전환 : Any state -> Die");
@@ -273,7 +275,7 @@ public class EnemyFSM : MonoBehaviour
     {
         //예외처리
         //피격상태이거나, 죽은 상태일때는 데미지 중첩으로 주지 않는다
-        if (state == EnemyState.Damaged || state == EnemyState.Die) return;
+        if (state == EnemyState.Die) return;
 
         //체력깍기
         for (float i = 0; i < value; i++)
@@ -297,6 +299,7 @@ public class EnemyFSM : MonoBehaviour
         else
         {
             hpBarImage.GetComponentsInParent<Image>()[1].color = Color.clear;
+            anim.SetBool("Damage", false);
             anim.SetTrigger("Die");
             state = EnemyState.Die;
             print("상태전환 : Any state -> Die");

@@ -15,11 +15,12 @@ public class IceWall : MonoBehaviour
     {
         
     }
-    private void OnCollisionEnter(Collision collision)
+    
+    private void OnTriggerEnter(Collider other)
     {
-        if (collision.gameObject.tag == "Enemy")
+        if (other.gameObject.tag == "Enemy")
         {
-            EnemyFSM ef = collision.gameObject.GetComponent<EnemyFSM>();
+            EnemyFSM ef = other.gameObject.GetComponent<EnemyFSM>();
             ef.hitDamage(1);
         }
     }

@@ -9,16 +9,25 @@ public class NormalMissile : MonoBehaviour
     Vector3 dir;
     Vector3 target;
     float minDistance = 9999f;
+
+    float curTime = 0;
+    float limitTime = 2;
     // Start is called before the first frame update
     void Start()
     {
         
     }
-
+    
     // Update is called once per frame
     void Update()
     {
-       
+        float minDistance = 9999f;
+        curTime += Time.deltaTime;
+       if(curTime>limitTime)
+        {
+            gameObject.SetActive(false);
+            curTime = 0;
+        }
         Collider[] cols = Physics.OverlapSphere(transform.position, 1f,1<<11);
         if (cols.Length <= 0)
         {
@@ -53,7 +62,7 @@ public class NormalMissile : MonoBehaviour
     }
     private void OnCollisionEnter(Collision collision)
     {
-        Destroy(gameObject);
+        gameObject.SetActive(false);
         
         GameObject exp = Instantiate(explosion);
         exp.transform.position =transform.position;
