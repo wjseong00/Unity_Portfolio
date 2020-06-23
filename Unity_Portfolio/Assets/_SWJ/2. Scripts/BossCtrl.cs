@@ -46,13 +46,13 @@ public class BossCtrl : MonoBehaviour
     #endregion
     #region "회오리공격에 대한 함수"
     public GameObject TornadoFactory;
-    GameObject tornado1;
-    GameObject tornado2;
-    float speedT = 1.5f;
-    float speed2T = 1.0f;
+
+    float curTornado = 0f;
+    float endTornado = 3.0f;
     public Transform torLocate1;
     public Transform torLocate2;
     bool creTor = false;
+    
     #endregion
 
     void Start()
@@ -64,10 +64,8 @@ public class BossCtrl : MonoBehaviour
         blast.SetActive(false);
         anim= GetComponent<Animator>();
         shake = GameObject.Find("CameraRig").GetComponent<Shake>();
-        tornado1 = Instantiate(TornadoFactory);
-        tornado1.SetActive(false);
-        tornado2 = Instantiate(TornadoFactory);
-        tornado2.SetActive(false);
+ 
+
 
     }
     
@@ -117,9 +115,10 @@ public class BossCtrl : MonoBehaviour
     {
         upTime = 0f;
         DownTime = 0f;
-        
+        creTor = false;
         curTime = 0f;
         curTimeChange = 0f;
+        curTornado = 0f;
     }
     //날아서 돌진공격
     private void FlyAttack()
@@ -141,10 +140,13 @@ public class BossCtrl : MonoBehaviour
             }
             else
             {
-                ValueReset();
+                
                
-                anim.SetBool("FireAttack",true);
+                
+                ValueReset();
                 state = (AttackPattern)Random.Range(1,4);
+                
+
                 Debug.Log("바뀜");
             }
             
@@ -211,7 +213,7 @@ public class BossCtrl : MonoBehaviour
     }
     
     
-    //추적레이저
+    //추적불발사
     private void LaserAttack()
     {
         anim.SetBool("FireAttack",true);
@@ -240,23 +242,30 @@ public class BossCtrl : MonoBehaviour
     }
     private void TornadoAttack()
     {
+        curTornado += Time.deltaTime;
         Invoke("createTornado", 2f);
+        if(curTornado>endTornado)
+        {
+            ValueReset();
+            state = (AttackPattern)Random.Range(1, 4);
+        }
+        
 
-        tornado1.transform.position = Vector3.Lerp(tornado1.transform.position, player.position, speedT * Time.deltaTime);
-        tornado2.transform.position = Vector3.Lerp(tornado2.transform.position, player.position, speed2T * Time.deltaTime);
     }
     void createTornado()
     {
-        tornado1.SetActive(true);
-        tornado2.SetActive(true);
-        if(!creTor)
+        
+        if (!creTor)
         {
+            GameObject tornado1 = Instantiate(TornadoFactory);
+            GameObject tornado2 = Instantiate(TornadoFactory);
+
             tornado1.transform.position = torLocate1.position;
             tornado2.transform.position = torLocate2.position;
             creTor = true;
         }
         
-        
+
     }
 
 
