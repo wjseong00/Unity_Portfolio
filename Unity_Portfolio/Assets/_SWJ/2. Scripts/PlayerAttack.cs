@@ -17,6 +17,8 @@ public class PlayerAttack : MonoBehaviour,IPointerDownHandler, IPointerUpHandler
     Vector3 dir;        //타겟의 방향
     Vector3 target;     //타겟의 벡터값
 
+    public bool stun=false;
+
     public List<GameObject> normalMissile;
     int missileSize = 20;
     int missileIndex = 0;
@@ -37,14 +39,18 @@ public class PlayerAttack : MonoBehaviour,IPointerDownHandler, IPointerUpHandler
     // Update is called once per frame
     void Update()
     {
-        Normal();
-        //Fire();
-        if (Input.GetKeyDown(KeyCode.P))
+        if(!stun)
         {
-            
-            StartCoroutine(FireAttack());
+            Normal();
+            //Fire();
+            if (Input.GetKeyDown(KeyCode.P))
+            {
+
+                StartCoroutine(FireAttack());
+            }
+            Ice();
         }
-        Ice();
+        
         
     }
 
@@ -181,4 +187,10 @@ public class PlayerAttack : MonoBehaviour,IPointerDownHandler, IPointerUpHandler
     {
         anim.SetBool("NormalAttack", false);
     }
+
+    public void setStun(bool _stun)
+    {
+        stun = _stun;
+    }
+    
 }

@@ -9,7 +9,7 @@ public class BossCtrl : MonoBehaviour
     public Transform firePos;
     enum AttackPattern
     {
-        idle,fly,laser,tornado
+        idle,fly,laser,frost
     }
     AttackPattern state;
     float speed = 1f;
@@ -24,9 +24,9 @@ public class BossCtrl : MonoBehaviour
     
     bool makeCircle=false;
     float curTime = 0;
-    float AttTime = 1f;
+    float AttTime = 3f;
     float curTimeChange = 0f;
-    float changeTime = 7f;
+    float changeTime = 10f;
     float upTime = 0f;
     float DownTime = 0f;
     float fullTime = 2.5f;
@@ -44,14 +44,14 @@ public class BossCtrl : MonoBehaviour
     float usingFire = 5f;
 
     #endregion
-    #region "회오리공격에 대한 함수"
-    public GameObject TornadoFactory;
+    #region "얼음공격에 대한 함수"
+    public GameObject FrostFactory;
 
-    float curTornado = 0f;
-    float endTornado = 3.0f;
-    public Transform torLocate1;
-    public Transform torLocate2;
-    bool creTor = false;
+    float curFrost = 0f;
+    float endFrost = 2.0f;
+    public Transform forLocate1;
+    public Transform forLocate2;
+    bool crefor = false;
     
     #endregion
 
@@ -82,8 +82,8 @@ public class BossCtrl : MonoBehaviour
             case AttackPattern.fly:
                 FlyAttack();
                 break;
-            case AttackPattern.tornado:
-                TornadoAttack();
+            case AttackPattern.frost:
+                FrostAttack();
                 break;
             
             case AttackPattern.laser:
@@ -105,7 +105,7 @@ public class BossCtrl : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.U))
         {
             ValueReset();
-            state = AttackPattern.tornado;
+            state = AttackPattern.frost;
         }
     }
 
@@ -115,12 +115,12 @@ public class BossCtrl : MonoBehaviour
     {
         upTime = 0f;
         DownTime = 0f;
-        creTor = false;
+        crefor = false;
         curTime = 0f;
         curTimeChange = 0f;
-        curTornado = 0f;
+        curFrost = 0f;
     }
-    //날아서 돌진공격
+    //날아서 번개공격
     private void FlyAttack()
     {
         Vector3 dir1 = (player.position - transform.position).normalized;
@@ -165,7 +165,7 @@ public class BossCtrl : MonoBehaviour
                 
                 curTimeChange += Time.deltaTime;
                 
-                Collider[] cols = Physics.OverlapSphere(transform.position - new Vector3(0, 3.5f, 0), 10f);
+                Collider[] cols = Physics.OverlapSphere(transform.position - new Vector3(0, 3.5f, 0), 15f);
                 if (cols.Length <= 0)
                 {
                     Debug.Log("타겟이 없음");
@@ -240,31 +240,32 @@ public class BossCtrl : MonoBehaviour
         }
         //laser.transform.rotation = transform.rotation;
     }
-    private void TornadoAttack()
+    private void FrostAttack()
     {
-        curTornado += Time.deltaTime;
-        Invoke("createTornado", 2f);
-        if(curTornado>endTornado)
+        anim.SetBool("TornadoAttack", true);
+        
+        curFrost += Time.deltaTime;
+        if (curFrost>endFrost)
         {
+            
+            GameObject frost1 = Instantiate(FrostFactory);
+            GameObject frost2 = Instantiate(FrostFactory);
+            curFrost = 0f;
+            frost1.transform.position = forLocate1.position;
+            frost2.transform.position = forLocate2.position;
             ValueReset();
-            state = (AttackPattern)Random.Range(1, 4);
+            anim.SetBool("TornadoAttack", false);
+            Invoke("changeState", 1f);
+            
         }
         
 
     }
-    void createTornado()
+    void changeState()
     {
-        
-        if (!creTor)
-        {
-            GameObject tornado1 = Instantiate(TornadoFactory);
-            GameObject tornado2 = Instantiate(TornadoFactory);
+        state = (AttackPattern)Random.Range(1, 4);
 
-            tornado1.transform.position = torLocate1.position;
-            tornado2.transform.position = torLocate2.position;
-            creTor = true;
-        }
-        
+
 
     }
 
