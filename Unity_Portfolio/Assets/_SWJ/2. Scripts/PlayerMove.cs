@@ -32,6 +32,11 @@ public class PlayerMove : MonoBehaviour
 
     bool stun = false;
 
+    public float rotationSpeed = 360f;
+
+
+
+
     void Start()
     {
         anim = GetComponent<Animator>();
@@ -44,36 +49,42 @@ public class PlayerMove : MonoBehaviour
     {
         if(!stun)
         {
-            float h = Input.GetAxis("Horizontal");
-            float v = Input.GetAxis("Vertical");
-            Vector3 dir = (Vector3.forward * v) + (Vector3.right * h);
+            //float h = Input.GetAxis("Horizontal");
+            //float v = Input.GetAxis("Vertical");
+            //Vector3 dir = (Vector3.forward * v) + (Vector3.right * h);
+            //
+            ////dir = transform.TransformDirection(dir);
+            //transform.Rotate(Vector3.up *rotaSpeed * Time.deltaTime*h);
+            //cc.Move(dir.normalized * frontSpeed * Time.deltaTime);
+            //velocityY += gravity * Time.deltaTime;
+            //dir.y = velocityY;
+            //
+            //
+            ////if (cc.collisionFlags == CollisionFlags.Below) //땅에 닿았냐?
+            //if (cc.isGrounded) //땅에 닿았냐?
+            //{
+            //
+            //    anim.SetBool("Jump", false);
+            //    velocityY = 0;
+            //    jumpCount = 0;
+            //}
+            //if (Input.GetButtonDown("Jump") && jumpCount < 2)
+            //{
+            //
+            //    //cameraObject.SendMessage("setCameraPositionJumpView");
+            //    if (!anim.IsInTransition(0))
+            //    {
+            //        anim.SetBool("Jump", true);
+            //        jumpCount++;
+            //        velocityY = jumpSpeed;
+            //    }
+            //}
 
-            //dir = transform.TransformDirection(dir);
-            transform.Rotate(Vector3.up *rotaSpeed * Time.deltaTime*h);
-            cc.Move(dir.normalized * frontSpeed * Time.deltaTime);
-            velocityY += gravity * Time.deltaTime;
-            dir.y = velocityY;
+            Vector3 direction = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
+
             
+
             
-            //if (cc.collisionFlags == CollisionFlags.Below) //땅에 닿았냐?
-            if (cc.isGrounded) //땅에 닿았냐?
-            {
-
-                anim.SetBool("Jump", false);
-                velocityY = 0;
-                jumpCount = 0;
-            }
-            if (Input.GetButtonDown("Jump") && jumpCount < 2)
-            {
-
-                //cameraObject.SendMessage("setCameraPositionJumpView");
-                if (!anim.IsInTransition(0))
-                {
-                    anim.SetBool("Jump", true);
-                    jumpCount++;
-                    velocityY = jumpSpeed;
-                }
-            }
         }
         
     }
