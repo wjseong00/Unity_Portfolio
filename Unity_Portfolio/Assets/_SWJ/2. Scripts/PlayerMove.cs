@@ -11,7 +11,7 @@ public class PlayerMove : MonoBehaviour
 
     CharacterController cc;
     public float aniSpeed = 1.5f;
-    public float frontSpeed = 4.0f;
+    public float frontSpeed = 2.0f;
     public float backSpeed = 2.0f;
     public float rotaSpeed = 2.0f;
     public float jumpSpeed = 3.0f;
@@ -49,75 +49,85 @@ public class PlayerMove : MonoBehaviour
     {
         if(!stun)
         {
-            //float h = Input.GetAxis("Horizontal");
-            //float v = Input.GetAxis("Vertical");
+            float h = Input.GetAxis("Horizontal");
+            float v = Input.GetAxis("Vertical");
+            Vector3 dir = new Vector3(0, 0, v);
             //Vector3 dir = (Vector3.forward * v) + (Vector3.right * h);
-            //
-            ////dir = transform.TransformDirection(dir);
-            //transform.Rotate(Vector3.up *rotaSpeed * Time.deltaTime*h);
-            //cc.Move(dir.normalized * frontSpeed * Time.deltaTime);
-            //velocityY += gravity * Time.deltaTime;
-            //dir.y = velocityY;
-            //
-            //
-            ////if (cc.collisionFlags == CollisionFlags.Below) //땅에 닿았냐?
-            //if (cc.isGrounded) //땅에 닿았냐?
-            //{
-            //
-            //    anim.SetBool("Jump", false);
-            //    velocityY = 0;
-            //    jumpCount = 0;
-            //}
-            //if (Input.GetButtonDown("Jump") && jumpCount < 2)
-            //{
-            //
-            //    //cameraObject.SendMessage("setCameraPositionJumpView");
-            //    if (!anim.IsInTransition(0))
-            //    {
-            //        anim.SetBool("Jump", true);
-            //        jumpCount++;
-            //        velocityY = jumpSpeed;
-            //    }
-            //}
 
-            Vector3 direction = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
+            //dir = transform.TransformDirection(dir);
+            //transform.Rotate(Vector3.up *rotaSpeed * Time.deltaTime*h);
+
 
             
+            //cc.Move(dir * frontSpeed * Time.deltaTime);
+            //if (cc.collisionFlags == CollisionFlags.Below) //땅에 닿았냐?
+            if (cc.isGrounded) //땅에 닿았냐?
+            {
+            
+                anim.SetBool("Jump", false);
+                velocityY = 0;
+                jumpCount = 0;
+            }
+            if (Input.GetButtonDown("Jump") && jumpCount < 2)
+            {
+            
+                //cameraObject.SendMessage("setCameraPositionJumpView");
+                if (!anim.IsInTransition(0))
+                {
+                    anim.SetBool("Jump", true);
+                    jumpCount++;
+                    velocityY = jumpSpeed;
+                }
+            }
+
+            //Vector3 direction = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
+            //
+            //if(direction.sqrMagnitude >0.01f)
+            //{
+            //    Vector3 forward = Vector3.Slerp(transform.forward, direction, rotationSpeed * Time.deltaTime / Vector3.Angle(transform.forward, direction));
+            //    transform.LookAt(transform.position + forward);
+            //}
+            //cc.Move(direction * moveSpeed * Time.deltaTime);
+            //anim.SetFloat("Speed", cc.velocity.magnitude);
 
             
         }
         
     }
     
-    //private void FixedUpdate()
-    //{
-    //    if(!stun)
-    //    {
-    //        float h = Input.GetAxis("Horizontal");
-    //        float v = Input.GetAxis("Vertical");
-    //        anim.SetFloat("Speed", v);
-    //        anim.SetFloat("Direction", h);
-    //        anim.speed = aniSpeed;
-    //        currentBaseState = anim.GetCurrentAnimatorStateInfo(0);
-    //        if (v > 0.1)
-    //        {
-    //            velocity *= frontSpeed;
-    //        }
-    //        else if (v < -0.1)
-    //        {
-    //            velocity *= backSpeed;
-    //        }
-    //
-    //
-    //
-    //
-    //        velocity = new Vector3(h, 0, v);
-    //        transform.rotation = Quaternion.LookRotation(velocity);
-    //        
-    //    }
-    //
-    //
-    //}
+    private void FixedUpdate()
+    {
+        if(!stun)
+        {
+            float h = Input.GetAxis("Horizontal");
+            float v = Input.GetAxis("Vertical");
+            anim.SetFloat("Speed", v);
+            anim.SetFloat("Direction", h);
+            anim.speed = aniSpeed;
+            currentBaseState = anim.GetCurrentAnimatorStateInfo(0);
+            //rig.useGravity = true;
+
+
+
+            velocity = new Vector3(0, 0, v);
+            velocity = transform.TransformDirection(velocity);
+            velocityY += gravity * Time.deltaTime;
+            velocity.y = velocityY;
+            //if (v > 0.1)
+            //{
+            //    velocity *= frontSpeed;
+            //}
+            //else if (v < -0.1)
+            //{
+            //    velocity *= backSpeed;
+            //}
+            //transform.localPosition += velocity * Time.fixedDeltaTime;
+            cc.Move(velocity * frontSpeed * Time.deltaTime);
+            transform.Rotate(0, h * rotaSpeed, 0);
+        }
+    
+    
+    }
     public void setStun(bool _stun)
     {
         stun = _stun;
