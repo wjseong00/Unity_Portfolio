@@ -28,5 +28,10 @@ public class IceWall : MonoBehaviour
             Enemy2FSM ef = other.gameObject.GetComponent<Enemy2FSM>();
             ef.hitDamage(10);
         }
+        else if (other.gameObject.name.Contains("Boss"))
+        {
+            BossCtrl bf = other.gameObject.GetComponent<BossCtrl>();
+            bf.Damaged(10);
+        }
     }
 }

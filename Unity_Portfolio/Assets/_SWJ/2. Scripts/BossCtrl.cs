@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using UnityEngine.UI;
 public class BossCtrl : MonoBehaviour
 {
     Transform player;
@@ -12,13 +12,19 @@ public class BossCtrl : MonoBehaviour
         idle,fly,laser,frost
     }
     AttackPattern state;
+    AttackPattern preState;
     float speed = 1f;
     bool dash = false;
 
     Animator anim;
 
+    public Image Hpbar;
+    float hp = 500f;//체력
+    float initHp = 500f;
+
+
     #region "썬더공격에 대한 함수"
-    
+
     public GameObject Thunder;
     public GameObject ThunderTarget;
     
@@ -33,6 +39,9 @@ public class BossCtrl : MonoBehaviour
     Vector3 target;
     Vector3 preTarget;
     private Shake shake;
+
+
+
     #endregion
     #region "파이어공격에 대한 함수"
     bool traceTarget = false;
@@ -87,7 +96,7 @@ public class BossCtrl : MonoBehaviour
                 break;
             
             case AttackPattern.laser:
-                LaserAttack();
+                FireAttack();
                 break;
             default:
                 break;
@@ -165,7 +174,7 @@ public class BossCtrl : MonoBehaviour
                 
                 curTimeChange += Time.deltaTime;
                 
-                Collider[] cols = Physics.OverlapSphere(transform.position - new Vector3(0, 3.5f, 0), 15f);
+                Collider[] cols = Physics.OverlapSphere(transform.position - new Vector3(0, 3.5f, 0), 20f);
                 if (cols.Length <= 0)
                 {
                     Debug.Log("타겟이 없음");
@@ -214,7 +223,7 @@ public class BossCtrl : MonoBehaviour
     
     
     //추적불발사
-    private void LaserAttack()
+    private void FireAttack()
     {
         anim.SetBool("FireAttack",true);
         Vector3 dir = (player.position - firePos.position).normalized;
@@ -234,9 +243,12 @@ public class BossCtrl : MonoBehaviour
         {
             fireTime = 0f;
             anim.SetBool("FireAttack", false);
+            player.GetComponent<PlayerDamage>().fire(false);
             blast.SetActive(false);
             ValueReset();
             state = (AttackPattern)Random.Range(1, 4);
+            
+            
         }
         //laser.transform.rotation = transform.rotation;
     }
@@ -254,7 +266,7 @@ public class BossCtrl : MonoBehaviour
             frost1.transform.position = forLocate1.position;
             frost2.transform.position = forLocate2.position;
             ValueReset();
-            anim.SetBool("TornadoAttack", false);
+            
             Invoke("changeState", 1f);
             
         }
@@ -263,11 +275,26 @@ public class BossCtrl : MonoBehaviour
     }
     void changeState()
     {
+        anim.SetBool("TornadoAttack", false);
         state = (AttackPattern)Random.Range(1, 4);
 
+    }
 
+    void minueDamaged()
+    {
+        hp--;
+        Hpbar.fillAmount = hp / initHp;
+        //hpBarImage.fillAmount = hp / initHp;
 
     }
+    public void Damaged(int value)
+    {
+        for (float i = 0; i < value; i++)
+        {
+            Invoke("minueDamaged", i / 10);
+        }
+    }
+
 
 
 }

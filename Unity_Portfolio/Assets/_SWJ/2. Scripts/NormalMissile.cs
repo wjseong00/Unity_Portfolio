@@ -77,5 +77,10 @@ public class NormalMissile : MonoBehaviour
             Enemy2FSM ef = collision.gameObject.GetComponent<Enemy2FSM>();
             ef.hitDamage(1);
         }
+        else if (collision.gameObject.name.Contains("Boss"))
+        {
+            BossCtrl bf = collision.gameObject.GetComponent<BossCtrl>();
+            bf.Damaged(1);
+        }
     }
 }

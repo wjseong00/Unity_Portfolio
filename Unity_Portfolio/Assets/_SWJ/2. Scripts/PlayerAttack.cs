@@ -60,7 +60,7 @@ public class PlayerAttack : MonoBehaviour,IPointerDownHandler, IPointerUpHandler
         {
             minDistance = 9999f;
 
-            Collider[] cols = Physics.OverlapSphere(transform.position, 5f, 1 << 11);
+            Collider[] cols = Physics.OverlapSphere(transform.position, 8f, 1 << 11);
             if (cols.Length <= 0)
             {
                 Debug.Log("대상이 존재하지 않음");
@@ -101,7 +101,7 @@ public class PlayerAttack : MonoBehaviour,IPointerDownHandler, IPointerUpHandler
             
             minDistance = 9999f;
 
-            Collider[] cols = Physics.OverlapSphere(transform.position, 5f, 1 << 11);
+            Collider[] cols = Physics.OverlapSphere(transform.position, 8f, 1 << 11);
             if (cols.Length <= 0)
             {
                 Debug.Log("대상이 존재하지 않음");

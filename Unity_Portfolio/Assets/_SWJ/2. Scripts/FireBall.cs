@@ -29,6 +29,11 @@ public class FireBall : MonoBehaviour
             Enemy2FSM ef = collision.gameObject.GetComponent<Enemy2FSM>();
             ef.hitDamage(5);
         }
+        else if (collision.gameObject.name.Contains("Boss"))
+        {
+            BossCtrl bf = collision.gameObject.GetComponent<BossCtrl>();
+            bf.Damaged(5);
+        }
         StartCoroutine(shake.ShakeCamera());
         Destroy(gameObject);
         GameObject exp = Instantiate(explosion);

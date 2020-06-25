@@ -12,6 +12,7 @@ public class Thunder : MonoBehaviour
     }
     private void OnTriggerEnter(Collider other)
     {
+        Destroy(gameObject,2f);
         if (other.tag == "Player")
         {
             player.GetComponent<PlayerDamage>().hitDamage(att);

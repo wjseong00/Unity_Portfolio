@@ -5,14 +5,17 @@ using UnityEngine;
 public class FrostMissile : MonoBehaviour
 {
     GameObject player;
+    GameObject boss;
+    public GameObject bombFactory;
     float speed =2.0f;
     Vector3 origin;
     
     void Start()
     {
         player = GameObject.Find("Player");
+        boss = GameObject.Find("Boss");
         origin = transform.position;
-        speed = Random.Range(0.4f, 1.6f);
+        speed = Random.Range(0.7f, 2.1f);
     }
 
     void Update()
@@ -24,5 +27,28 @@ public class FrostMissile : MonoBehaviour
         
         Destroy(gameObject,13f);
         
+    }
+    private void OnCollisionEnter(Collision collision)
+    {
+        if(collision.gameObject.tag=="Player")
+        {
+            Destroy(gameObject);
+            player.GetComponent<PlayerDamage>().hitDamage(10);
+            player.GetComponent<PlayerDamage>().freeze();
+            GameObject bomb = Instantiate(bombFactory);
+            bomb.transform.position = transform.position;
+            Destroy(bomb, 1f);
+
+        }
+        
+        if(collision.gameObject.tag == "Enemy")
+        {
+            Destroy(gameObject);
+            boss.GetComponent<BossCtrl>().Damaged(10);
+            GameObject bomb = Instantiate(bombFactory);
+            bomb.transform.position = transform.position;
+            Destroy(bomb, 1f);
+        }
+            
     }
 }
