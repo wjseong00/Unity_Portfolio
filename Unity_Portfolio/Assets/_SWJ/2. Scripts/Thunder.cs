@@ -15,8 +15,8 @@ public class Thunder : MonoBehaviour
         Destroy(gameObject,2f);
         if (other.tag == "Player")
         {
-            player.GetComponent<PlayerDamage>().hitDamage(att);
-            player.GetComponent<PlayerDamage>().StunPlayer();
+            
+            player.GetComponent<PlayerDamage>().StunPlayer(att);
 
 
         }

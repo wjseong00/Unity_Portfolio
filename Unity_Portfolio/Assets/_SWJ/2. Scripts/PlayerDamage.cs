@@ -28,33 +28,35 @@ public class PlayerDamage : MonoBehaviour
 
     public void hitDamage(int value)
     {
-        if(GetComponent<PlayerAttack>().stun != true)
-        {
-            StartCoroutine(delay());
-        }
+        
         
         for (int i = 0; i < value; i++)
         {
             Invoke("minusHp", i / 10);
         }
         
+
     }
-    public void StunPlayer()
+    public void StunPlayer(int value)
     {
+        
         anim.SetBool("Stun", true);
         GameObject stun = Instantiate(stunFactory,transform);
         stun.transform.position = transform.position + new Vector3(0, 0.6f, 0);
-        Destroy(stun, 1.5f);
         
+        Destroy(stun, 1.5f);
         if (GetComponent<PlayerAttack>().stun == true)
         {
             StopAllCoroutines();
         }
-        StartCoroutine(isStun());
+        StartCoroutine(isStun(value));
     }
-    IEnumerator isStun()
+    IEnumerator isStun(int value)
     {
-        
+        for (int i = 0; i < value; i++)
+        {
+            Invoke("minusHp", i / 10);
+        }
         GetComponent<PlayerAttack>().setStun(true);
         GetComponent<PlayerMove>().setStun(true);
         yield return new WaitForSeconds(2f);
