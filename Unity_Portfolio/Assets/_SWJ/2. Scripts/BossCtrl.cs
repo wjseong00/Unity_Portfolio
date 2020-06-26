@@ -41,6 +41,8 @@ public class BossCtrl : MonoBehaviour
     private Shake shake;
 
 
+    public GameObject hudDamageText;
+    public Transform hudPos;
 
     #endregion
     #region "파이어공격에 대한 함수"
@@ -293,6 +295,12 @@ public class BossCtrl : MonoBehaviour
         {
             Invoke("minueDamaged", i / 10);
         }
+        GameObject hudText = Instantiate(hudDamageText); // 생성할 텍스트 오브젝트
+        hudText.transform.position = hudPos.position; // 표시될 위치
+        Vector3 dir = (transform.position - player.transform.position).normalized;
+        dir.y = 0;
+        hudText.transform.rotation = Quaternion.LookRotation(dir);
+        hudText.GetComponent<DamageText>().damage = value; // 데미지 전달
     }
 
 

@@ -21,17 +21,17 @@ public class IceWall : MonoBehaviour
         if (other.gameObject.name.Contains("Witch"))
         {
             EnemyFSM ef = other.gameObject.GetComponent<EnemyFSM>();
-            ef.hitDamage(10);
+            ef.hitDamage(Random.Range(10,16));
         }
         else if (other.gameObject.name.Contains("Mushroom"))
         {
             Enemy2FSM ef = other.gameObject.GetComponent<Enemy2FSM>();
-            ef.hitDamage(10);
+            ef.hitDamage(Random.Range(10, 16));
         }
         else if (other.gameObject.name.Contains("Boss"))
         {
             BossCtrl bf = other.gameObject.GetComponent<BossCtrl>();
-            bf.Damaged(10);
+            bf.Damaged(Random.Range(10, 16));
         }
     }
 }

@@ -62,7 +62,7 @@ public class FollowCam : MonoBehaviour
 
         //카메라 위치 변화 계산
         Quaternion rotation = Quaternion.Euler(y, x, 0);
-        Vector3 position = rotation * new Vector3(0,2.0f,-6f) + target.position + new Vector3(0.0f, 0, 0.0f);
+        Vector3 position = rotation * new Vector3(0,1.0f,-4f) + target.position + new Vector3(0.0f, 0, 0.0f);
 
         transform.rotation = rotation;
         transform.position = position;

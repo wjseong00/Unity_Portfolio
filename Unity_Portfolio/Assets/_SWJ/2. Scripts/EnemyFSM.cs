@@ -15,6 +15,10 @@ public class EnemyFSM : MonoBehaviour
         Idle, Move, Attack, Return, Damaged, Die
     }
     EnemyState state;//몬스터 상태 변수
+    public GameObject coinFactory;
+    public GameObject hudDamageText;
+    public Transform hudPos;
+    public GameObject deathFactory;
 
     /// 유용한 기능
     #region "Idle 상태에 필요한 변수들"
@@ -48,7 +52,7 @@ public class EnemyFSM : MonoBehaviour
     Vector3 startPoint;//몬스터 시작위치
     Transform player;   //플레이어를 찾기위해
     Animator anim;
-
+    GameObject hpBar;
     public GameObject hpBarPrefab;
     public Vector3 hpBarOffset = new Vector3(0, 1.1f, 0);
 
@@ -85,7 +89,7 @@ public class EnemyFSM : MonoBehaviour
     void setHpBar()
     {
         uiCanvas = GameObject.Find("UI Canvas").GetComponent<Canvas>();
-        GameObject hpBar = Instantiate<GameObject>(hpBarPrefab, uiCanvas.transform);
+        hpBar = Instantiate<GameObject>(hpBarPrefab, uiCanvas.transform);
         hpBarImage = hpBar.GetComponentsInChildren<Image>()[1];
 
         var _hpbar = hpBar.GetComponent<HpBarScript>();
@@ -282,6 +286,10 @@ public class EnemyFSM : MonoBehaviour
         {
             Invoke("MinusHp", i/10);
         }
+        GameObject hudText = Instantiate(hudDamageText); // 생성할 텍스트 오브젝트
+        hudText.transform.position = hudPos.position; // 표시될 위치
+        hudText.transform.rotation = Quaternion.LookRotation(transform.position - player.transform.position);
+        hudText.GetComponent<DamageText>().damage = value; // 데미지 전달
         //hp--;
         //hpBarImage.fillAmount = hp / initHp;
 
@@ -308,7 +316,8 @@ public class EnemyFSM : MonoBehaviour
         }
     }
 
-
+    
+    
 
     //피격상태 (Any State)
     private void Damaged()
@@ -323,7 +332,7 @@ public class EnemyFSM : MonoBehaviour
         //피격 상태를 처리하기 위한 코루틴을 실행한다
         StartCoroutine(DamageProc());
     }
-
+    
     //피격상태 처리용 코루틴
     IEnumerator DamageProc()
     {
@@ -360,9 +369,16 @@ public class EnemyFSM : MonoBehaviour
 
         //2초후에 자기자신을 제거한다
         
-        yield return new WaitForSeconds(2.0f);
-        
-        //Destroy(gameObject);
+        yield return new WaitForSeconds(1.0f);
+        GameObject coin = Instantiate(coinFactory);
+        coin.transform.position = transform.position+new Vector3(0,0.5f,0);
+        GameObject death = Instantiate(deathFactory);
+        death.transform.position = transform.position + new Vector3(0, 0.5f, 0);
+        Destroy(hpBar);
+        Destroy(gameObject);
+        Destroy(death, 2f);
+        Destroy(coin, 6f);
+
     }
 
     

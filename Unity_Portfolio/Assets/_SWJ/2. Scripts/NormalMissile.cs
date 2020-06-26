@@ -15,13 +15,13 @@ public class NormalMissile : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+       
     }
     
     // Update is called once per frame
     void Update()
     {
-        float minDistance = 9999f;
+        minDistance = 9999f;
         curTime += Time.deltaTime;
        if(curTime>limitTime)
         {
@@ -53,7 +53,7 @@ public class NormalMissile : MonoBehaviour
             }
             dir.y = 0;
             dir.Normalize();
-            transform.position = Vector3.Lerp(transform.position, target, 5 * Time.deltaTime);
+            transform.position = Vector3.Lerp(transform.position, target+new Vector3(0,0.4f,0), 5 * Time.deltaTime);
 
 
         }
@@ -62,25 +62,26 @@ public class NormalMissile : MonoBehaviour
     }
     private void OnCollisionEnter(Collision collision)
     {
-        gameObject.SetActive(false);
         
+        if (collision.gameObject.name.Contains("Witch"))
+        {
+            EnemyFSM ef = collision.gameObject.GetComponent<EnemyFSM>();
+            ef.hitDamage(Random.Range(1, 4));
+        }
+        if (collision.gameObject.name.Contains("Mushroom"))
+        {
+            Enemy2FSM ef = collision.gameObject.GetComponent<Enemy2FSM>();
+            ef.hitDamage(Random.Range(1, 4));
+        }
+        if (collision.gameObject.name.Contains("Boss"))
+        {
+            BossCtrl bf = collision.gameObject.GetComponent<BossCtrl>();
+            bf.Damaged(Random.Range(1, 4));
+        }
+        gameObject.SetActive(false);
         GameObject exp = Instantiate(explosion);
         exp.transform.position =transform.position;
         Destroy(exp, 1f);
-        if(collision.gameObject.name.Contains("Witch"))
-        {
-            EnemyFSM ef = collision.gameObject.GetComponent<EnemyFSM>();
-            ef.hitDamage(1);
-        }
-        else if (collision.gameObject.name.Contains("Mushroom"))
-        {
-            Enemy2FSM ef = collision.gameObject.GetComponent<Enemy2FSM>();
-            ef.hitDamage(1);
-        }
-        else if (collision.gameObject.name.Contains("Boss"))
-        {
-            BossCtrl bf = collision.gameObject.GetComponent<BossCtrl>();
-            bf.Damaged(1);
-        }
+        
     }
 }

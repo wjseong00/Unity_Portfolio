@@ -22,17 +22,17 @@ public class FireBall : MonoBehaviour
         if (collision.gameObject.name.Contains("Witch"))
         {
             EnemyFSM ef = collision.gameObject.GetComponent<EnemyFSM>();
-            ef.hitDamage(5);
+            ef.hitDamage(Random.Range(5,11));
         }
         else if (collision.gameObject.name.Contains("Mushroom"))
         {
             Enemy2FSM ef = collision.gameObject.GetComponent<Enemy2FSM>();
-            ef.hitDamage(5);
+            ef.hitDamage(Random.Range(5, 11));
         }
         else if (collision.gameObject.name.Contains("Boss"))
         {
             BossCtrl bf = collision.gameObject.GetComponent<BossCtrl>();
-            bf.Damaged(5);
+            bf.Damaged(Random.Range(5, 11));
         }
         StartCoroutine(shake.ShakeCamera());
         Destroy(gameObject);

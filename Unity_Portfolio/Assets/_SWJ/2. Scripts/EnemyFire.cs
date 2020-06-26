@@ -18,19 +18,20 @@ public class EnemyFire : MonoBehaviour
     void Update()
     {
         transform.Translate(Vector3.forward * speed * Time.deltaTime);
+        Destroy(gameObject, 3f);
     }
-    private void OnCollisionEnter(Collision collision)
+    
+    private void OnTriggerEnter(Collider other)
     {
         Destroy(gameObject);
 
         GameObject exp = Instantiate(explosion);
         exp.transform.position = transform.position;
         Destroy(exp, 1f);
-        if(collision.collider.name == "Player")
+        if (other.name == "Player")
         {
             //플레이어의 필요한 스크립트 컴포넌트를 가져와서 데미지를 주면 된다
             player.GetComponent<PlayerDamage>().hitDamage(att);
         }
-        
     }
 }
