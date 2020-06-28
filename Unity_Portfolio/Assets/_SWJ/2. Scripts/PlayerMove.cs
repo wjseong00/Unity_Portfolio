@@ -22,6 +22,8 @@ public class PlayerMove : MonoBehaviour
     private Animator anim;
     private AnimatorStateInfo currentBaseState;
     private GameObject cameraObject;
+
+    public bool isJumpBar = false;
     
 
     bool stun = false;
@@ -39,29 +41,42 @@ public class PlayerMove : MonoBehaviour
         cameraObject = GameObject.FindWithTag("MainCamera");
     }
 
-
+    
     void Update()
     {
         if(!stun)
         {
-            
+            if(isJumpBar)
+            {
+                jumpSpeed = 10f;
+            }
+            else
+            {
+                jumpSpeed = 4f;
+            }
             if (cc.isGrounded) //땅에 닿았냐?
             {
-
                 anim.SetBool("Jump", false);
                 velocityY = 0;
                 jumpCount = 0;
             }
+            var ray = new Ray(this.transform.position + Vector3.up * 0.1f, Vector3.down);
+            var maxDistance = 0.25f;
+            Debug.DrawRay(transform.position + Vector3.up * 0.1f, Vector3.down * maxDistance, Color.red);
+            if (Physics.Raycast(ray,maxDistance,1<<8))
+            {
+                anim.SetBool("Jump", false);
+                velocityY = 0;
+                jumpCount = 0;
+            }
+            
             if (Input.GetButtonDown("Jump") && jumpCount < 2)
             {
-
                 
-                if (!anim.IsInTransition(0))
-                {
-                    anim.SetBool("Jump", true);
-                    jumpCount++;
-                    velocityY = jumpSpeed;
-                }
+                anim.SetBool("Jump", true);
+                jumpCount++;
+                velocityY = jumpSpeed;
+
             }
 
 
@@ -111,5 +126,25 @@ public class PlayerMove : MonoBehaviour
     public void setStun(bool _stun)
     {
         stun = _stun;
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if(other.tag=="Ground")
+        {
+            anim.SetBool("Jump", false);
+            velocityY = 0;
+            jumpCount = 0;
+        }
+        
+    }
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.tag == "Ground")
+        {
+            anim.SetBool("Jump", false);
+            velocityY = 0;
+            jumpCount = 0;
+        }
     }
 }

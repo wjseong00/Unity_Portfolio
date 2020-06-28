@@ -23,7 +23,7 @@ public class IceWall : MonoBehaviour
             EnemyFSM ef = other.gameObject.GetComponent<EnemyFSM>();
             ef.hitDamage(Random.Range(10,16));
         }
-        else if (other.gameObject.name.Contains("Mushroom"))
+        else if (other.gameObject.name.Contains("Mushroom") || other.gameObject.name.Contains("KeyMonster"))
         {
             Enemy2FSM ef = other.gameObject.GetComponent<Enemy2FSM>();
             ef.hitDamage(Random.Range(10, 16));

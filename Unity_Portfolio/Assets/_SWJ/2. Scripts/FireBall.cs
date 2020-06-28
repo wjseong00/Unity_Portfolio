@@ -24,7 +24,7 @@ public class FireBall : MonoBehaviour
             EnemyFSM ef = collision.gameObject.GetComponent<EnemyFSM>();
             ef.hitDamage(Random.Range(5,11));
         }
-        else if (collision.gameObject.name.Contains("Mushroom"))
+        else if (collision.gameObject.name.Contains("Mushroom") || collision.gameObject.name.Contains("KeyMonster"))
         {
             Enemy2FSM ef = collision.gameObject.GetComponent<Enemy2FSM>();
             ef.hitDamage(Random.Range(5, 11));

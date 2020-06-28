@@ -68,7 +68,7 @@ public class NormalMissile : MonoBehaviour
             EnemyFSM ef = collision.gameObject.GetComponent<EnemyFSM>();
             ef.hitDamage(Random.Range(1, 4));
         }
-        if (collision.gameObject.name.Contains("Mushroom"))
+        if (collision.gameObject.name.Contains("Mushroom")|| collision.gameObject.name.Contains("KeyMonster"))
         {
             Enemy2FSM ef = collision.gameObject.GetComponent<Enemy2FSM>();
             ef.hitDamage(Random.Range(1, 4));

@@ -5,6 +5,8 @@ using UnityEngine;
 public class PlayerMoney : MonoBehaviour
 {
     public int coinCount=0;
+    public bool isKey = false;
+    public bool isItem = false;
     void Start()
     {
         

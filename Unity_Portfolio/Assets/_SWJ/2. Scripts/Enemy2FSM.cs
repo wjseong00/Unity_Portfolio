@@ -138,7 +138,7 @@ public class Enemy2FSM : MonoBehaviour
         {
             anim.SetBool("Run",true);
             state = EnemyState.Move;
-            print("상태전환 : Idle -> Move");
+            
         }
 
     }
@@ -158,7 +158,7 @@ public class Enemy2FSM : MonoBehaviour
         {
             anim.SetBool("Run", true);
             state = EnemyState.Return;
-            print("상태전환 : Move -> Return");
+            
 
         }
         //리턴상태가 아니면 플레이어를 추격해야 한다
@@ -169,8 +169,16 @@ public class Enemy2FSM : MonoBehaviour
             Vector3 dir = (player.position - transform.position).normalized;
           
             transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(dir), 10 * Time.deltaTime);
-            nav.SetDestination(player.position);
-          
+            if (!nav.pathPending)
+            {
+                nav.SetDestination(player.position);
+            }
+            else
+            {
+                anim.SetBool("Run", true);
+                state = EnemyState.Return;
+            }
+
         }
         else //공격범위 안에 들어옴
         {
@@ -178,7 +186,7 @@ public class Enemy2FSM : MonoBehaviour
             anim.SetBool("Run", false);
             
             state = EnemyState.Attack;
-            print("상태전환 : Move -> Attack");
+           
             
         }
 
@@ -212,8 +220,7 @@ public class Enemy2FSM : MonoBehaviour
             if (timer > attTime)
             {
                 anim.SetBool("Attack", true);
-
-                print("공격");
+                
                 Invoke("delay", 0.5f);
                 
 
@@ -231,8 +238,7 @@ public class Enemy2FSM : MonoBehaviour
             anim.SetBool("Attack",false);
             anim.SetBool("Run", true);
             state = EnemyState.Move;
-
-            print("상태전환 : Attack -> Move");
+            
             //타이머 초기화
             timer = 0f;
         }
@@ -256,7 +262,7 @@ public class Enemy2FSM : MonoBehaviour
             nav.ResetPath();
             anim.SetBool("Run", false);
             state = EnemyState.Idle;
-            print("상태전환 : Return -> Idle");
+           
         }
 
 
@@ -266,14 +272,14 @@ public class Enemy2FSM : MonoBehaviour
         
         hp--;
         hpBarImage.fillAmount = hp / initHp;
-        print("HP : " + hp);
+        
         if (hp <= 0)
         {
             hpBarImage.GetComponentsInParent<Image>()[1].color = Color.clear;
             anim.SetBool("Damage", false);
             anim.SetTrigger("Die");
             state = EnemyState.Die;
-            print("상태전환 : Any state -> Die");
+           
 
             Die();
         }
@@ -296,6 +302,7 @@ public class Enemy2FSM : MonoBehaviour
         hudText.transform.position = hudPos.position; // 표시될 위치
         hudText.transform.rotation = Quaternion.LookRotation(transform.position - player.transform.position);
         hudText.GetComponent<DamageText>().damage = value; // 데미지 전달
+        
         //hp--;
         //hpBarImage.fillAmount = hp / initHp;
 
@@ -304,9 +311,7 @@ public class Enemy2FSM : MonoBehaviour
         {
             state = EnemyState.Damaged;
             anim.SetBool("Damage", true);
-            print("상태전환 : Any state -> Damaged");
-            print("HP : " + hp);
-
+            
             Damaged();
         }
         //0이하이면 죽음상태
@@ -316,7 +321,7 @@ public class Enemy2FSM : MonoBehaviour
             anim.SetBool("Damage", false);
             anim.SetTrigger("Die");
             state = EnemyState.Die;
-            print("상태전환 : Any state -> Die");
+            
 
             Die();
         }
@@ -348,7 +353,7 @@ public class Enemy2FSM : MonoBehaviour
         
         //현재상태를 이동으로 전환
         state = EnemyState.Move;
-        print("상태전환 : Damaged -> Move");
+        
     }
 
     //죽음상태 (Any State)

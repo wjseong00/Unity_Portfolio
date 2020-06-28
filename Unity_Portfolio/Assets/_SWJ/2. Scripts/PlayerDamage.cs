@@ -17,7 +17,7 @@ public class PlayerDamage : MonoBehaviour
     void minusHp()
     {
         hp--;
-        print("플레이어 피 : " + hp);
+        
     }
     IEnumerator delay()
     {
@@ -70,7 +70,7 @@ public class PlayerDamage : MonoBehaviour
         if (isFire)
         {
             hp-=0.2f;
-            print("플레이어 피 : " + hp);
+           
         }
     }
     public void fire(bool _fire)

@@ -30,7 +30,7 @@ public class BossCtrl : MonoBehaviour
     
     bool makeCircle=false;
     float curTime = 0;
-    float AttTime = 3f;
+    float AttTime = 5f;
     float curTimeChange = 0f;
     float changeTime = 10f;
     float upTime = 0f;
@@ -157,8 +157,7 @@ public class BossCtrl : MonoBehaviour
                 ValueReset();
                 state = (AttackPattern)Random.Range(1,4);
                 
-
-                Debug.Log("바뀜");
+                
             }
             
         }
@@ -177,12 +176,8 @@ public class BossCtrl : MonoBehaviour
                 curTimeChange += Time.deltaTime;
                 
                 Collider[] cols = Physics.OverlapSphere(transform.position - new Vector3(0, 3.5f, 0), 20f);
-                if (cols.Length <= 0)
-                {
-                    Debug.Log("타겟이 없음");
-                }
-                else
-                {
+                
+                
                     for (int i = 0; i < cols.Length; i++)
                     {
                         if (cols[i].tag == "Player")
@@ -208,7 +203,7 @@ public class BossCtrl : MonoBehaviour
                         }
                     }
 
-                }
+                
             }
         }
         
