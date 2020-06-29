@@ -36,8 +36,10 @@ public class InventoryUI : MonoBehaviour
 
     private void SlotChange(int val)
     {
+        
         for (int i = 0; i < slots.Length; i++)
         {
+            slots[i].slotnum = i;
             if (i < inven.SlotCnt)
                 slots[i].GetComponent<Button>().interactable = true;
             else
@@ -57,5 +59,14 @@ public class InventoryUI : MonoBehaviour
     public void AddSlot()
     {
         inven.SlotCnt++;
+    }
+
+    public GameObject shop;
+
+    public void RayShop()
+    {
+        Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        mousePos.z = -10;
+        Debug.DrawRay(mousePos, transform.forward, Color.red, 0.5f);
     }
 }

@@ -76,7 +76,8 @@ public class BossCtrl : MonoBehaviour
         blast.SetActive(false);
         anim= GetComponent<Animator>();
         shake = GameObject.Find("CameraRig").GetComponent<Shake>();
- 
+        canvas = GameObject.Find("View").GetComponent<Canvas>();
+
 
 
     }

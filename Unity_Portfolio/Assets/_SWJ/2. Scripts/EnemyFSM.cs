@@ -92,7 +92,7 @@ public class EnemyFSM : MonoBehaviour
         uiCanvas = GameObject.Find("UI Canvas").GetComponent<Canvas>();
         hpBar = Instantiate<GameObject>(hpBarPrefab, uiCanvas.transform);
         hpBarImage = hpBar.GetComponentsInChildren<Image>()[1];
-
+        canvas = GameObject.Find("View").GetComponent<Canvas>();
         var _hpbar = hpBar.GetComponent<HpBarScript>();
         _hpbar.targetTr = this.gameObject.transform;
         _hpbar.offset = hpBarOffset;

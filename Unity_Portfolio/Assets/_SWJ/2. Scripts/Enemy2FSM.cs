@@ -80,7 +80,8 @@ public class Enemy2FSM : MonoBehaviour
         player = GameObject.Find("Player").transform;
         //애니메이터
         anim = GetComponent<Animator>();
-        
+
+        canvas = GameObject.Find("View").GetComponent<Canvas>();
         //네비게이션
         nav = GetComponent<NavMeshAgent>();
         setHpBar();

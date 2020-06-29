@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 public enum ItemType
 {
     Equipment,
@@ -13,7 +14,8 @@ public class Item
 {
     public ItemType itemType;
     public string itemName;
-    public Material itemImage;
+    public Sprite itemImage;
+    
     public List<ItemEffect> efts;
     public bool Use()
     {
@@ -23,6 +25,6 @@ public class Item
             isUsed = eft.ExecuteRole();
         }
        
-        return false;
+        return isUsed;
     }
 }

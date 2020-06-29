@@ -5,8 +5,8 @@ using UnityEngine;
 public class PlayerDamage : MonoBehaviour
 {
     public GameObject stunFactory;
-    float hp=100f;
-    float initHp=100f;
+    public float hp=100f;
+    public float initHp=100f;
     Animator anim;
     public bool isFire = false;
     public bool isFreeze = false;

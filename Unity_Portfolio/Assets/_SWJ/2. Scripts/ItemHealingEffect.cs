@@ -6,9 +6,10 @@ using UnityEngine;
 public class ItemHealingEffect : ItemEffect
 {
     public int healingPoint = 0;
+    
     public override bool ExecuteRole()
     {
-        Debug.Log("PlayerHp Add: " + healingPoint);
+        GameObject.Find("Player").GetComponent<PlayerDamage>().hp += healingPoint;
         return true;
     }
 }
