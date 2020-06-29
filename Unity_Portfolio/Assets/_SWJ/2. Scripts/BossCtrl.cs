@@ -7,6 +7,7 @@ public class BossCtrl : MonoBehaviour
     Transform player;
     CharacterController cc;
     public Transform firePos;
+    public Canvas canvas;
     enum AttackPattern
     {
         idle,fly,laser,frost
@@ -291,10 +292,10 @@ public class BossCtrl : MonoBehaviour
             Invoke("minueDamaged", i / 10);
         }
         GameObject hudText = Instantiate(hudDamageText); // 생성할 텍스트 오브젝트
-        hudText.transform.position = hudPos.position; // 표시될 위치
-        Vector3 dir = (transform.position - player.transform.position).normalized;
-        dir.y = 0;
-        hudText.transform.rotation = Quaternion.LookRotation(dir);
+        Vector3 ScreenPos = Camera.main.WorldToScreenPoint(hudPos.position);
+
+        hudText.transform.localPosition = ScreenPos; // 표시될 위치
+        hudText.transform.SetParent(canvas.transform);
         hudText.GetComponent<DamageText>().damage = value; // 데미지 전달
     }
 

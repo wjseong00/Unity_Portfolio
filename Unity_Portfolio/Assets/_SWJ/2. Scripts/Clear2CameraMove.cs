@@ -20,6 +20,9 @@ public class Clear2CameraMove : MonoBehaviour
     int count = 0;
     bool checkEnemy = false;
     bool isPlayer = false;
+    float curTime = 0f;
+    float maxTime = 2f;
+    bool isMove = false;
     void Start()
     {
         player = GameObject.Find("Player");
@@ -43,9 +46,7 @@ public class Clear2CameraMove : MonoBehaviour
                 {
                     isPlayer = true;
                 }
-
-
-
+                
             }
             if (enemyCount != 0)
             {
@@ -67,20 +68,33 @@ public class Clear2CameraMove : MonoBehaviour
         {
             originPos = cameraRig.transform.position;
             originRot = cameraRig.transform.rotation;
+            
             setMainPos = false;
 
         }
         if (startCameraMove)
         {
-            Invoke("StartMove", 2f);
+            if(!isMove)
+            {
+                curTime += Time.deltaTime;
+                if (curTime > maxTime)
+                {
+                    UiInter.SetActive(false);
+                    player.SetActive(false);
+                    cameraRig.transform.position = Vector3.Lerp(cameraRig.transform.position, transform.position, 0.5f * Time.deltaTime);
+                    cameraRig.transform.rotation = Quaternion.Lerp(cameraRig.transform.rotation, transform.rotation, 0.5f * Time.deltaTime);
+                }
+            }
+            
 
             cameraRig.GetComponent<FollowCam>().enabled = false;
 
             if (Vector3.Distance(cameraRig.transform.position, transform.position) < 0.2f)
             {
+                isMove = true;
                 StartCoroutine(showBlock());
-
                 
+
             }
         }
         
@@ -95,28 +109,19 @@ public class Clear2CameraMove : MonoBehaviour
         bridge[2].SetActive(true);
         yield return new WaitForSeconds(0.4f);
         bridge[3].SetActive(true);
-        Invoke("EndMove", 2f);
         yield return new WaitForSeconds(0.4f);
-        
-    }
-    void StartMove()
-    {
-        UiInter.SetActive(false);
-        player.SetActive(false);
-        cameraRig.transform.position = Vector3.Lerp(cameraRig.transform.position, transform.position, 0.5f * Time.deltaTime);
-        cameraRig.transform.rotation = Quaternion.Lerp(cameraRig.transform.rotation, transform.rotation, 0.5f * Time.deltaTime);
-    }
-    void EndMove()
-    {
-        
         endCameraMove = true;
+        
         cameraRig.GetComponent<FollowCam>().enabled = true;
         UiInter.SetActive(true);
         player.SetActive(true);
+        
         cameraRig.transform.position = originPos;
         cameraRig.transform.rotation = originRot;
         startCameraMove = false;
 
 
     }
+  
+    
 }

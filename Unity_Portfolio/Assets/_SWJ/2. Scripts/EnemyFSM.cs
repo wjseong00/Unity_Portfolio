@@ -20,6 +20,7 @@ public class EnemyFSM : MonoBehaviour
     public Transform hudPos;
     public GameObject deathFactory;
 
+    public Canvas canvas;
     /// 유용한 기능
     #region "Idle 상태에 필요한 변수들"
 
@@ -184,7 +185,7 @@ public class EnemyFSM : MonoBehaviour
         }
         else //공격범위 안에 들어옴
         {
-            
+            nav.ResetPath();
             anim.SetBool("Run", false);
             
             state = EnemyState.Attack;
@@ -296,8 +297,11 @@ public class EnemyFSM : MonoBehaviour
             Invoke("MinusHp", i/10);
         }
         GameObject hudText = Instantiate(hudDamageText); // 생성할 텍스트 오브젝트
-        hudText.transform.position = hudPos.position; // 표시될 위치
-        hudText.transform.rotation = Quaternion.LookRotation(transform.position - player.transform.position);
+        Vector3 ScreenPos = Camera.main.WorldToScreenPoint(hudPos.position);
+
+        hudText.transform.localPosition= ScreenPos; // 표시될 위치
+        hudText.transform.SetParent(canvas.transform);
+        //hudText.transform.rotation = Quaternion.LookRotation(transform.position - player.transform.position);
         hudText.GetComponent<DamageText>().damage = value; // 데미지 전달
         //hp--;
         //hpBarImage.fillAmount = hp / initHp;

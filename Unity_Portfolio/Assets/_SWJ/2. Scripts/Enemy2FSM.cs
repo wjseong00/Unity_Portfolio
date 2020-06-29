@@ -15,7 +15,7 @@ public class Enemy2FSM : MonoBehaviour
         Idle, Move, Attack, Return, Damaged, Die
     }
     EnemyState state;//몬스터 상태 변수
-
+    public Canvas canvas;
     /// 유용한 기능
     #region "Idle 상태에 필요한 변수들"
 
@@ -299,8 +299,10 @@ public class Enemy2FSM : MonoBehaviour
             Invoke("MinusHp", i/10);
         }
         GameObject hudText = Instantiate(hudDamageText); // 생성할 텍스트 오브젝트
-        hudText.transform.position = hudPos.position; // 표시될 위치
-        hudText.transform.rotation = Quaternion.LookRotation(transform.position - player.transform.position);
+        Vector3 ScreenPos = Camera.main.WorldToScreenPoint(hudPos.position);
+
+        hudText.transform.localPosition = ScreenPos; // 표시될 위치
+        hudText.transform.SetParent(canvas.transform);
         hudText.GetComponent<DamageText>().damage = value; // 데미지 전달
         
         //hp--;

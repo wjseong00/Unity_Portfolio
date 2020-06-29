@@ -15,6 +15,10 @@ public class Clear1CameraMove : MonoBehaviour
     public bool startCameraMove = false;
     public bool endCameraMove = false;
     bool setMainPos = false;
+    bool isPlayer = false;
+    float curTime = 0f;
+    float maxTime = 2f;
+    bool isMove = false;
     Vector3 originPos;
     Quaternion originRot;
 
@@ -38,7 +42,10 @@ public class Clear1CameraMove : MonoBehaviour
                 {
                     enemyCount++;
                 }
-
+                else if (cols[i].tag == "Player")
+                {
+                    isPlayer = true;
+                }
 
 
             }
@@ -48,9 +55,12 @@ public class Clear1CameraMove : MonoBehaviour
             }
             else
             {
-                startCameraMove = true;
-                setMainPos = true;
-                checkEnemy = true;
+                if (isPlayer)
+                {
+                    startCameraMove = true;
+                    setMainPos = true;
+                    checkEnemy = true;
+                }
             }
         }
         
@@ -63,12 +73,24 @@ public class Clear1CameraMove : MonoBehaviour
         }
         if(startCameraMove)
         {
-            Invoke("StartMove", 2f);
-            
+            if (!isMove)
+            {
+                curTime += Time.deltaTime;
+                if (curTime > maxTime)
+                {
+                    UiInter.SetActive(false);
+                    player.SetActive(false);
+                    cameraRig.transform.position = Vector3.Lerp(cameraRig.transform.position, transform.position, 0.5f * Time.deltaTime);
+                    cameraRig.transform.rotation = Quaternion.Lerp(cameraRig.transform.rotation, transform.rotation, 0.5f * Time.deltaTime);
+                }
+            }
+
+
             cameraRig.GetComponent<FollowCam>().enabled = false;
             
             if (Vector3.Distance(cameraRig.transform.position, transform.position)<0.2f)
             {
+                isMove = true;
                 Portal.SetActive(true);
                
                 Invoke("EndMove", 2f);
@@ -77,13 +99,7 @@ public class Clear1CameraMove : MonoBehaviour
         
         
     }
-    void StartMove()
-    {
-        UiInter.SetActive(false);
-        player.SetActive(false);
-        cameraRig.transform.position = Vector3.Lerp(cameraRig.transform.position, transform.position, 0.5f * Time.deltaTime);
-        cameraRig.transform.rotation = Quaternion.Lerp(cameraRig.transform.rotation, transform.rotation, 0.5f * Time.deltaTime);
-    }
+    
     void EndMove()
     {
         endCameraMove = true;
