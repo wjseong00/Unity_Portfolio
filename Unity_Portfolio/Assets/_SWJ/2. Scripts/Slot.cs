@@ -9,6 +9,9 @@ public class Slot : MonoBehaviour,IPointerUpHandler
     public Item item;
     public Image itemIcon;
 
+    public bool isShopMode;
+    public bool isSell = false;
+    public GameObject chkSell;
     public void UpdateSlotUI()
     {
         itemIcon.sprite = item.itemImage;
@@ -19,13 +22,50 @@ public class Slot : MonoBehaviour,IPointerUpHandler
         item = null;
         itemIcon.gameObject.SetActive(false);
     }
-
+    
     public void OnPointerUp(PointerEventData eventData)
     {
-        bool isUse = item.Use();
-        if(isUse)
+        if(item!=null)
         {
-            Inventory.instance.RemoveItem(slotnum);
+            if(!isShopMode)
+            {
+                bool isUse = item.Use();
+                if (isUse)
+                {
+                    if (item.itemType == ItemType.Etc)
+                    {
+
+                    }
+                    else
+                    {
+                        Inventory.instance.RemoveItem(slotnum);
+                    }
+
+                }
+            }
+            else
+            {
+                //상점
+                isSell = true;
+                chkSell.SetActive(isSell);
+            }
+            
         }
+        
+    }
+    public void SellItem()
+    {
+        if(isSell)
+        {
+            ItemDatabase.instance.money += item.itemCost;
+            Inventory.instance.RemoveItem(slotnum);
+            isSell = false;
+            chkSell.SetActive(isSell);
+        }
+    }
+    private void OnDisable()
+    {
+        isSell = false;
+        chkSell.SetActive(isSell);
     }
 }

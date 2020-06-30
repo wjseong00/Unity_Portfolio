@@ -12,11 +12,7 @@ public class NormalMissile : MonoBehaviour
 
     float curTime = 0;
     float limitTime = 2;
-    // Start is called before the first frame update
-    void Start()
-    {
-       
-    }
+    
     
     // Update is called once per frame
     void Update()
@@ -66,6 +62,7 @@ public class NormalMissile : MonoBehaviour
         if (collision.gameObject.name.Contains("Witch"))
         {
             EnemyFSM ef = collision.gameObject.GetComponent<EnemyFSM>();
+            
             ef.hitDamage(Random.Range(1, 4));
         }
         if (collision.gameObject.name.Contains("Mushroom")|| collision.gameObject.name.Contains("KeyMonster"))

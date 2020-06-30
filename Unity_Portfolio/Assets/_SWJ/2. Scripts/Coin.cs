@@ -22,7 +22,7 @@ public class Coin : MonoBehaviour
         {
             if(cols[i].tag=="Player")
             {
-                player.GetComponent<PlayerMoney>().AddCoin(1);
+                ItemDatabase.instance.money += 100;
                 Destroy(gameObject);
             }
         }

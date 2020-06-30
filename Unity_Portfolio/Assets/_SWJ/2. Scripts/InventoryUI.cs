@@ -10,14 +10,24 @@ public class InventoryUI : MonoBehaviour
     bool activeInventory = false;
     public Slot[] slots;
     public Transform slotHolder;
-
+    public ShopSlot[] shopSlots;
+    public Transform shopHolder;
+    
     private void Start()
     {
         inven = Inventory.instance;
         slots = slotHolder.GetComponentsInChildren<Slot>();
+        shopSlots = shopHolder.GetComponentsInChildren<ShopSlot>();
+        for (int i = 0; i < shopSlots.Length; i++)
+        {
+            shopSlots[i].Init(this);
+            shopSlots[i].slotnum = i;
+        }
         inven.onSlotCountChange += SlotChange;
         inven.onChangeItem += RedrawSlotUI;
+        RedrawSlotUI();
         inventoryPanel.SetActive(activeInventory);
+        closeShop.onClick.AddListener(DeActiveShop);
     }
 
     private void RedrawSlotUI()
@@ -49,7 +59,7 @@ public class InventoryUI : MonoBehaviour
 
     private void Update()
     {
-        if(Input.GetKeyDown(KeyCode.I))
+        if(Input.GetKeyDown(KeyCode.I) &&!isStoreActive)
         {
             activeInventory = !activeInventory;
             inventoryPanel.SetActive(activeInventory);
@@ -61,12 +71,54 @@ public class InventoryUI : MonoBehaviour
         inven.SlotCnt++;
     }
 
+    
     public GameObject shop;
+    public Button closeShop;
+    public bool isStoreActive;
+    public ShopData shopData;
 
-    public void RayShop()
+    public void OpenStore()
     {
-        Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        mousePos.z = -10;
-        Debug.DrawRay(mousePos, transform.forward, Color.red, 0.5f);
+        ActiveShop(true);
+        shopData = GameObject.Find("ShopMaster").GetComponent<ShopData>();
+        for (int i = 0; i < shopData.stocks.Count; i++)
+        {
+            shopSlots[i].item = shopData.stocks[i];
+            shopSlots[i].UpdateSlotUI();
+        }
+    }
+    public void Buy(int num)
+    {
+        shopData.soldOuts[num] = true;
+    }
+    public void ActiveShop(bool isOpen)
+    {
+        if(!activeInventory)
+        {
+            isStoreActive = isOpen;
+            shop.SetActive(isOpen);
+            inventoryPanel.SetActive(isOpen);
+            for (int i = 0; i < slots.Length; i++)
+            {
+                slots[i].isShopMode = isOpen;
+            }
+        }
+        
+    }
+    public void DeActiveShop()
+    {
+        ActiveShop(false);
+        shopData = null;
+        for (int i = 0; i < shopSlots.Length; i++)
+        {
+            shopSlots[i].RemoveSlot();
+        }
+    }
+    public void SellBtn()
+    {
+        for (int i = slots.Length; i >0 ; i--)
+        {
+            slots[i - 1].SellItem();
+        }
     }
 }

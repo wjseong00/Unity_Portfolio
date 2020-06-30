@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Inventory : MonoBehaviour
 {
+    
     public static Inventory instance;
     private void Awake()
     {
@@ -46,6 +47,11 @@ public class Inventory : MonoBehaviour
         if(items.Count<SlotCnt)
         {
             items.Add(_item);
+            if(_item.itemType == ItemType.Etc)
+            {
+                _item.Use();
+            }
+            
             if(onChangeItem!=null)
             onChangeItem.Invoke();
             return true;
@@ -64,7 +70,11 @@ public class Inventory : MonoBehaviour
         {
             FieldItems fieldItems = other.GetComponent<FieldItems>();
             if (AddItem(fieldItems.GetItem()))
+            {
                 fieldItems.DestroyItem();
+                
+            }
         }
+        
     }
 }
