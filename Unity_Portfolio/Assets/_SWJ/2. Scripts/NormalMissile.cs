@@ -63,17 +63,17 @@ public class NormalMissile : MonoBehaviour
         {
             EnemyFSM ef = collision.gameObject.GetComponent<EnemyFSM>();
             
-            ef.hitDamage(Random.Range(1, 4));
+            ef.hitDamage(Random.Range(1, 4) + GameObject.Find("Player").GetComponent<PlayerAttack>().att);
         }
         if (collision.gameObject.name.Contains("Mushroom")|| collision.gameObject.name.Contains("KeyMonster"))
         {
             Enemy2FSM ef = collision.gameObject.GetComponent<Enemy2FSM>();
-            ef.hitDamage(Random.Range(1, 4));
+            ef.hitDamage(Random.Range(1, 4) + GameObject.Find("Player").GetComponent<PlayerAttack>().att);
         }
         if (collision.gameObject.name.Contains("Boss"))
         {
             BossCtrl bf = collision.gameObject.GetComponent<BossCtrl>();
-            bf.Damaged(Random.Range(1, 4));
+            bf.Damaged(Random.Range(1, 4) + GameObject.Find("Player").GetComponent<PlayerAttack>().att);
         }
         gameObject.SetActive(false);
         GameObject exp = Instantiate(explosion);

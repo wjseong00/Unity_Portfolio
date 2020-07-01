@@ -9,6 +9,9 @@ public class ShopData : MonoBehaviour
     private void Start()
     {
         stocks.Add(ItemDatabase.instance.itemDB[2]);
+        stocks.Add(ItemDatabase.instance.itemDB[3]);
+        stocks.Add(ItemDatabase.instance.itemDB[4]);
+        stocks.Add(ItemDatabase.instance.itemDB[5]);
         soldOuts = new bool[stocks.Count];
         for (int i = 0; i < soldOuts.Length; i++)
         {

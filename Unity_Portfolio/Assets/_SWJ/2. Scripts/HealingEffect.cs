@@ -2,17 +2,16 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Healing : MonoBehaviour
+[CreateAssetMenu(menuName = "ItemEft/Consumables/HpPotion")]
+public class HealingEffect : ItemEffect
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    public int healingPoint = 0;
 
-    // Update is called once per frame
-    void Update()
+
+    public override bool ExecuteRole()
     {
         
+        GameObject.Find("Player").GetComponent<PlayerDamage>().hp += healingPoint;
+        return true;
     }
 }

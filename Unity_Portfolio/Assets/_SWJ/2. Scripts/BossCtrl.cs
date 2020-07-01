@@ -22,7 +22,8 @@ public class BossCtrl : MonoBehaviour
     public Image Hpbar;
     float hp = 500f;//체력
     float initHp = 500f;
-
+    public GameObject hudDamageText;
+    public Transform hudPos;
 
     #region "썬더공격에 대한 함수"
 
@@ -42,8 +43,7 @@ public class BossCtrl : MonoBehaviour
     private Shake shake;
 
 
-    public GameObject hudDamageText;
-    public Transform hudPos;
+   
 
     #endregion
     #region "파이어공격에 대한 함수"

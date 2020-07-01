@@ -12,11 +12,14 @@ public class PlayerAttack : MonoBehaviour,IPointerDownHandler, IPointerUpHandler
     public GameObject iceAttackMotion;
     public GameObject normalAttackMotion;
     private Animator anim;
-    
+
+    public float mp = 100f;
+    public float initMp = 100f;
     float minDistance = 9999f; //가장 가까이있는 타겟 구하기
     Vector3 dir;        //타겟의 방향
     Vector3 target;     //타겟의 벡터값
 
+    public int att = 0;
     public bool stun=false;
 
     public List<GameObject> normalMissile;

@@ -15,7 +15,7 @@ public class PlayerMove : MonoBehaviour
     public float backSpeed = 2.0f;
     public float rotaSpeed = 2.0f;
     public float jumpSpeed = 5.0f;
-
+    public GameObject startPoint;
     public float gravity = -10;
     float velocityY;        //낙하속도(벨로시티는 방향과 힘을 들고 있다)
     private Vector3 velocity;

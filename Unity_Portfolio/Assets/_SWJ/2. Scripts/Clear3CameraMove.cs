@@ -106,11 +106,11 @@ public class Clear3CameraMove : MonoBehaviour
         for(int i = 0; i <16; i++)
         {
             bridge[i].SetActive(true);
-            yield return new WaitForSeconds(0.4f);
+            yield return new WaitForSeconds(0.2f);
             if(i==15)
             {
                 Invoke("EndMove", 0.5f);
-                yield return new WaitForSeconds(0.4f);
+                yield return new WaitForSeconds(0.2f);
             }
         }
         

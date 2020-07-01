@@ -5,15 +5,15 @@ using UnityEngine;
 public class BossShow : MonoBehaviour
 {
     public GameObject playerStartPos;
-    GameObject cameraRig;
-    GameObject player;
+    public GameObject cameraRig;
+    public GameObject player;
     public GameObject UiInter;
+    public GameObject camPos1;
     bool startShow = false;
 
     void Start()
     {
-        player = GameObject.Find("Player");
-        cameraRig = GameObject.Find("CameraRig");
+ 
     }
 
 
@@ -23,8 +23,11 @@ public class BossShow : MonoBehaviour
         if(startShow)
         {
             UiInter.SetActive(false);
+
             cameraRig.GetComponent<FollowCam>().enabled = false;
-            
+            player.GetComponent<PlayerMove>().enabled = false;
+            player.GetComponent<PlayerAttack>().enabled = false;
+            player.GetComponent<PlayerBossScene>().enabled = true;
         }
     }
     private void OnTriggerEnter(Collider other)
@@ -33,6 +36,9 @@ public class BossShow : MonoBehaviour
         {
             if(!startShow)
             {
+                Camera.main.gameObject.SetActive(false);
+                camPos1.SetActive(true);
+                player.transform.position = playerStartPos.transform.position;
                 startShow = true;
             }
             

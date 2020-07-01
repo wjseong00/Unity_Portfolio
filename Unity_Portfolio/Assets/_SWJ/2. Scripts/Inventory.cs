@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class Inventory : MonoBehaviour
 {
-    
+    public bool bossShow = false;
+    public bool bossEnd = false;
     public static Inventory instance;
     private void Awake()
     {

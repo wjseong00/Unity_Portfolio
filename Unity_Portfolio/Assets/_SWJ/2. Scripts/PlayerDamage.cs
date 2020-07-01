@@ -7,6 +7,7 @@ public class PlayerDamage : MonoBehaviour
     public GameObject stunFactory;
     public float hp=100f;
     public float initHp=100f;
+
     Animator anim;
     public bool isFire = false;
     public bool isFreeze = false;
