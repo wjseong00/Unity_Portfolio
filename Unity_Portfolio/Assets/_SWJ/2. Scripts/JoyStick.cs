@@ -12,6 +12,8 @@ public class JoyStick : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, I
     [SerializeField] private GameObject go_Player;
     [SerializeField] private float moveSpeed;
 
+    public Vector2 value;
+    public Animator anim;
     private bool isTouch = false;
     private Vector3 movePosition;
 
@@ -26,14 +28,19 @@ public class JoyStick : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, I
     {
         if(isTouch)
         {
+            anim.SetBool("Run", true);
             go_Player.transform.position += movePosition;
             go_Player.transform.rotation = Quaternion.LookRotation(movePosition);
+        }
+        else
+        {
+            anim.SetBool("Run", false);
         }
     }
 
     public void OnDrag(PointerEventData eventData)
     {
-        Vector2 value = eventData.position - (Vector2)rect_Background.position;
+        value = eventData.position - (Vector2)rect_Background.position;
 
         value = Vector2.ClampMagnitude(value, radius);
         rect_Jonstick.localPosition = value;
@@ -54,6 +61,7 @@ public class JoyStick : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, I
     {
         isTouch = false;
         rect_Jonstick.localPosition = Vector3.zero;
+        value = Vector2.zero;
         movePosition = Vector3.zero;
     }
 

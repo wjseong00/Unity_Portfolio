@@ -5,12 +5,16 @@ using UnityEngine;
 public class BossMoveScene : MonoBehaviour
 {
     Animator anim;
-    public GameObject camPos2;
+    
 
     float curTime = 0f;
+   
     float arriveTime = 3f;
     float moveSpeed = 0.2f;
-
+    bool hawling = false;
+    
+    
+    
     private void Start()
     {
         anim = GetComponent<Animator>();
@@ -26,7 +30,17 @@ public class BossMoveScene : MonoBehaviour
         if (curTime > arriveTime)
         {
             anim.SetBool("Walk", false);
-            
+            if(!hawling)
+            {
+                anim.SetTrigger("Hawling");
+                hawling = true;
+
+            }
+            GetComponent<BossSceneEnd>().enabled = true;
+            GetComponent<BossMoveScene>().enabled = false;
+                
+                
+           
             //camPos2.SetActive(false);
 
         }

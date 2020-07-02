@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
-public class PlayerAttack : MonoBehaviour,IPointerDownHandler, IPointerUpHandler 
+using UnityEngine.UI;
+public class PlayerAttack : MonoBehaviour
 {
     public GameObject fireBall;
     public GameObject iceWall;
@@ -44,22 +45,22 @@ public class PlayerAttack : MonoBehaviour,IPointerDownHandler, IPointerUpHandler
     {
         if(!stun)
         {
-            Normal();
+            //Normal();
             //Fire();
             if (Input.GetKeyDown(KeyCode.P))
             {
 
                 StartCoroutine(FireAttack());
             }
-            Ice();
+            //Ice();
         }
         
         
     }
 
-    private void Ice()
+    public void Ice()
     {
-        if(Input.GetKeyDown(KeyCode.O))
+        //if(Input.GetKeyDown(KeyCode.O))
         {
             minDistance = 9999f;
 
@@ -96,8 +97,11 @@ public class PlayerAttack : MonoBehaviour,IPointerDownHandler, IPointerUpHandler
             }
         }
     }
-
-    private void Fire()
+    public void FireBall()
+    {
+        StartCoroutine(FireAttack());
+    }
+    public void Fire()
     {
         //if(Input.GetKeyDown(KeyCode.P))
         {
@@ -141,7 +145,7 @@ public class PlayerAttack : MonoBehaviour,IPointerDownHandler, IPointerUpHandler
             }
         }
     }
-    IEnumerator FireAttack()
+    public IEnumerator FireAttack()
     {
         Fire();
         yield return new WaitForSeconds(0.2f);
@@ -154,12 +158,12 @@ public class PlayerAttack : MonoBehaviour,IPointerDownHandler, IPointerUpHandler
     }
 
 
-    private void Normal()
+    public void Normal()
     {
-        if(Input.GetMouseButtonDown(0))
+        //if(Input.GetMouseButtonDown(0))
         {
-            anim.SetBool("NormalAttack", true);
-            
+            //anim.SetBool("NormalAttack", true);
+            anim.SetTrigger("Attack");
             normalMissile[missileIndex].SetActive(true);
             normalMissile[missileIndex].transform.position = attackPos.position;
             normalMissile[missileIndex].transform.rotation = attackPos.rotation;
@@ -174,26 +178,17 @@ public class PlayerAttack : MonoBehaviour,IPointerDownHandler, IPointerUpHandler
             Destroy(motion, 1f);
             
         }
-        if(Input.GetMouseButtonUp(0))
+        //if(Input.GetMouseButtonUp(0))
         {
-            anim.SetBool("NormalAttack",false);
+           // anim.SetBool("NormalAttack",false);
             
         }
     }
-
-    public void OnPointerDown(PointerEventData eventData)
-    {
-        anim.SetBool("NormalAttack", true);
-    }
-
-    public void OnPointerUp(PointerEventData eventData)
-    {
-        anim.SetBool("NormalAttack", false);
-    }
-
+    
     public void setStun(bool _stun)
     {
         stun = _stun;
     }
+
     
 }

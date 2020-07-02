@@ -70,7 +70,7 @@ public class BossCtrl : MonoBehaviour
     void Start()
     {
         player = GameObject.Find("Player").transform;
-        state = AttackPattern.idle;
+        state = (AttackPattern)Random.Range(1,4);
         cc = GetComponent<CharacterController>();
         blast = Instantiate(blastFactory);
         blast.SetActive(false);

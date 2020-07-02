@@ -7,10 +7,9 @@ public class CameraMoveBoss : MonoBehaviour
     float curTime = 0;
     float curTime2 = 0;
     float limitTime = 2f;
-    public GameObject isClear;
     public GameObject upBlack;
     public GameObject downBlack;
-
+    public GameObject portal;
     void Update()
     {
         if (Inventory.instance.bossShow == true)
@@ -32,6 +31,7 @@ public class CameraMoveBoss : MonoBehaviour
                 upBlack.transform.Translate(Vector3.up * 25 * Time.deltaTime);
                 downBlack.transform.Translate(Vector3.down * 25 * Time.deltaTime);
             }
+            portal.SetActive(false);
 
 
         }

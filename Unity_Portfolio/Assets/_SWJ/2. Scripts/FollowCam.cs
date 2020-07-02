@@ -6,7 +6,7 @@ public class FollowCam : MonoBehaviour
 {
     public Transform camPos;
     public Transform target;
-    
+    public CameraJoyStick joystick;
     //카메라 회전 속도
     public float xSpeed = 220.0f;
     public float ySpeed = 100.0f;
@@ -14,6 +14,9 @@ public class FollowCam : MonoBehaviour
     //카메라 초기 위치
     private float x = 0.0f;
     private float y = 0.0f;
+
+    private float h = 0.0f;
+    private float v = 0.0f;
 
     //y값 제한
     public float yMinLimit = -20f;
@@ -51,9 +54,17 @@ public class FollowCam : MonoBehaviour
         //tr.RotateAround(tr.position, target.position,h);
         //tr.LookAt(target.position + (target.up * targetOffset));
 
+        //h = Input.GetAxis("Mouse X");
+        //v = Input.GetAxis("Mouse Y");
+        
+        h = joystick.value.x;
+        v = joystick.value.y;
+        
+        Debug.Log(h);
         //카메라 회전속도 계산
-        x += Input.GetAxis("Mouse X") * xSpeed * 0.015f;
-        y -= Input.GetAxis("Mouse Y") * ySpeed * 0.015f;
+        x += h * xSpeed * 0.015f;
+        y -= v * ySpeed * 0.015f;
+
 
         //앵글값 정하기
         //y값의 Min과 MaX 없애면 y값이 360도 계속 돎

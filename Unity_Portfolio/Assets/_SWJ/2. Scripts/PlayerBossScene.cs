@@ -5,14 +5,15 @@ using UnityEngine;
 public class PlayerBossScene : MonoBehaviour
 {
     Animator anim;
+    CharacterController cc;
     public GameObject camPos1;
     public GameObject camPos2;
     public GameObject portal;
     public GameObject startPos;
     public GameObject boss;
     float curTime = 0f;
-    float arriveTime = 6f;
-    float moveSpeed = 0.4f;
+    float arriveTime = 4f;
+    float moveSpeed = 0.6f;
     private void Start()
     {
         anim = GetComponent<Animator>();
@@ -38,7 +39,7 @@ public class PlayerBossScene : MonoBehaviour
         {
             Vector3 dir = (portal.transform.position - startPos.transform.position).normalized;
             dir.y = 0;
-            transform.Translate(dir * moveSpeed * Time.deltaTime);
+            cc.Move(dir * moveSpeed * Time.deltaTime);
         }
     }
 }
