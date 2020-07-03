@@ -24,7 +24,8 @@ public class PlayerMove : MonoBehaviour
     private GameObject cameraObject;
 
     public bool isJumpBar = false;
-    
+    float h = 0f;
+   float v = 0f;
 
     bool stun = false;
     public float slowTime =10f;
@@ -70,12 +71,16 @@ public class PlayerMove : MonoBehaviour
                 jumpCount = 0;
             }
             
-            if (Input.GetButtonDown("Jump") && jumpCount < 2)
+            if(Imotal.instance.isKeyBorad==true)
             {
-                
-                anim.SetBool("Jump", true);
-                jumpCount++;
-                velocityY = jumpSpeed;
+                if (Input.GetButtonDown("Jump") && jumpCount < 2)
+                {
+
+                    anim.SetBool("Jump", true);
+                    jumpCount++;
+                    velocityY = jumpSpeed;
+
+                }
 
             }
 
@@ -84,27 +89,48 @@ public class PlayerMove : MonoBehaviour
         }
         
     }
-    
+    public void Jump()
+    {
+        if (jumpCount < 2)
+        {
+
+            anim.SetBool("Jump", true);
+            jumpCount++;
+            velocityY = jumpSpeed;
+            velocityY += gravity * Time.deltaTime;
+            velocity.y = velocityY;
+            cc.Move(velocity * frontSpeed * Time.deltaTime);
+        }
+    }
     private void FixedUpdate()
     {
         if(!stun)
         {
-            float h = Input.GetAxisRaw("Horizontal");
-            float v = Input.GetAxisRaw("Vertical");
-            //anim.SetFloat("Speed", v);
-            //anim.SetFloat("Speed", h);
-            
+            if(Imotal.instance.isKeyBorad == true)
+            {
+                h = Input.GetAxisRaw("Horizontal");
+                v = Input.GetAxisRaw("Vertical");
+                //anim.SetFloat("Speed", v);
+                //anim.SetFloat("Speed", h);
+
+            }
+            else
+            {
+
+            }
+
+
             anim.speed = aniSpeed;
             currentBaseState = anim.GetCurrentAnimatorStateInfo(0);
             //rig.useGravity = true;
-            
+
 
 
             velocity = new Vector3(h, 0, v);
-            
+
             velocity = Camera.main.transform.TransformDirection(velocity);
             velocity.y = 0;
-            
+
             if (h == 0 && v == 0)
             {
                 anim.SetBool("Run", false);
@@ -118,7 +144,7 @@ public class PlayerMove : MonoBehaviour
             velocityY += gravity * Time.deltaTime;
             velocity.y = velocityY;
             cc.Move(velocity * frontSpeed * Time.deltaTime);
-         
+
         }
     
     

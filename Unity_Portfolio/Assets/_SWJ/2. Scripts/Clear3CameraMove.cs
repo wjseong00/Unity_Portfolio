@@ -10,6 +10,7 @@ public class Clear3CameraMove : MonoBehaviour
 
     public GameObject UiInter;
     public GameObject[] bridge;
+    public GameObject smokeFactory;
     GameObject player;
 
     public bool startCameraMove = false;
@@ -23,6 +24,10 @@ public class Clear3CameraMove : MonoBehaviour
     float maxTime = 2f;
     bool isMove = false;
     bool isPlayer = false;
+    bool start = false;
+    public GameObject option;
+    public GameObject hpBar;
+    public GameObject mpBar;
     void Start()
     {
         player = GameObject.Find("Player");
@@ -80,10 +85,16 @@ public class Clear3CameraMove : MonoBehaviour
                 curTime += Time.deltaTime;
                 if (curTime > maxTime)
                 {
-                    UiInter.SetActive(false);
+                    if (Imotal.instance.isKeyBorad == false)
+                    {
+                        UiInter.SetActive(false);
+                    }
+                    option.SetActive(false);
                     player.SetActive(false);
-                    cameraRig.transform.position = Vector3.Lerp(cameraRig.transform.position, transform.position, 0.5f * Time.deltaTime);
-                    cameraRig.transform.rotation = Quaternion.Lerp(cameraRig.transform.rotation, transform.rotation, 0.5f * Time.deltaTime);
+                    hpBar.SetActive(false);
+                    mpBar.SetActive(false);
+                    cameraRig.transform.position = Vector3.Lerp(cameraRig.transform.position, transform.position, 1f * Time.deltaTime);
+                    cameraRig.transform.rotation = Quaternion.Lerp(cameraRig.transform.rotation, transform.rotation, 1f * Time.deltaTime);
                 }
             }
 
@@ -93,7 +104,12 @@ public class Clear3CameraMove : MonoBehaviour
             if (Vector3.Distance(cameraRig.transform.position, transform.position) < 0.2f)
             {
                 isMove = true;
-                StartCoroutine(showBlock());
+                if(!start)
+                {
+                    StartCoroutine(showBlock());
+                    start = true;
+                }
+                
 
 
             }
@@ -106,6 +122,9 @@ public class Clear3CameraMove : MonoBehaviour
         for(int i = 0; i <16; i++)
         {
             bridge[i].SetActive(true);
+            GameObject smoke = Instantiate(smokeFactory);
+            smoke.transform.position = bridge[i].transform.position;
+            Destroy(smoke,1f);
             yield return new WaitForSeconds(0.2f);
             if(i==15)
             {
@@ -123,8 +142,14 @@ public class Clear3CameraMove : MonoBehaviour
         startCameraMove = false;
         endCameraMove = true;
         cameraRig.GetComponent<FollowCam>().enabled = true;
-        UiInter.SetActive(true);
+        if (Imotal.instance.isKeyBorad == false)
+        {
+            UiInter.SetActive(true);
+        }
         player.SetActive(true);
+        option.SetActive(true);
+        hpBar.SetActive(true);
+        mpBar.SetActive(true);
         cameraRig.transform.position = originPos;
         cameraRig.transform.rotation = originRot;
 

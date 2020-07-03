@@ -23,7 +23,7 @@ public class BossMoveScene : MonoBehaviour
     
     void Update()
     {
-        anim.SetBool("Run", false);
+        
         anim.SetBool("Walk", true);
 
         curTime += Time.deltaTime;

@@ -53,14 +53,21 @@ public class FollowCam : MonoBehaviour
         //
         //tr.RotateAround(tr.position, target.position,h);
         //tr.LookAt(target.position + (target.up * targetOffset));
-
-        //h = Input.GetAxis("Mouse X");
-        //v = Input.GetAxis("Mouse Y");
+        if(Imotal.instance.isKeyBorad == true)
+        {
+            h = Input.GetAxis("Mouse X");
+            v = Input.GetAxis("Mouse Y");
+        }
+        else
+        {
+            h = joystick.value.x;
+            v = joystick.value.y;
+        }
+        //
+        //
         
-        h = joystick.value.x;
-        v = joystick.value.y;
         
-        Debug.Log(h);
+        
         //카메라 회전속도 계산
         x += h * xSpeed * 0.015f;
         y -= v * ySpeed * 0.015f;

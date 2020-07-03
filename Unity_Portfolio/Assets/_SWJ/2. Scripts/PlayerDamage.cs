@@ -1,13 +1,15 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerDamage : MonoBehaviour
 {
     public GameObject stunFactory;
     public float hp=100f;
     public float initHp=100f;
-
+    public GameObject joystick;
+    public Image hpBar;
     Animator anim;
     public bool isFire = false;
     public bool isFreeze = false;
@@ -18,7 +20,8 @@ public class PlayerDamage : MonoBehaviour
     void minusHp()
     {
         hp--;
-        
+        hpBar.fillAmount = hp / initHp;
+
     }
     IEnumerator delay()
     {
@@ -35,7 +38,7 @@ public class PlayerDamage : MonoBehaviour
         {
             Invoke("minusHp", i / 10);
         }
-        
+        Debug.Log("플레이어 피 " + hp);
 
     }
     public void StunPlayer(int value)
@@ -60,19 +63,22 @@ public class PlayerDamage : MonoBehaviour
         }
         GetComponent<PlayerAttack>().setStun(true);
         GetComponent<PlayerMove>().setStun(true);
+        joystick.GetComponent<JoyStick>().stun=true;
         yield return new WaitForSeconds(2f);
         anim.SetBool("Stun", false);
         GetComponent<PlayerAttack>().setStun(false);
         GetComponent<PlayerMove>().setStun(false);
-        
+        joystick.GetComponent<JoyStick>().stun = false;
+
     }
     private void Update()
     {
         if (isFire)
         {
             hp-=0.2f;
-           
+            hpBar.fillAmount = hp / initHp;
         }
+        
     }
     public void fire(bool _fire)
     {
@@ -86,8 +92,12 @@ public class PlayerDamage : MonoBehaviour
     {
         GetComponent<PlayerMove>().frontSpeed = 2.0f;
         GetComponent<PlayerMove>().aniSpeed = 0.7f;
+        joystick.GetComponent<JoyStick>().moveSpeed = 2.0f;
+        joystick.GetComponent<JoyStick>().aniSpeed = 0.7f;
         yield return new WaitForSeconds(2f);
         GetComponent<PlayerMove>().frontSpeed = 4f;
         GetComponent<PlayerMove>().aniSpeed = 1.5f;
+        joystick.GetComponent<JoyStick>().moveSpeed = 2.0f;
+        joystick.GetComponent<JoyStick>().aniSpeed = 0.7f;
     }
 }

@@ -21,9 +21,10 @@ public class Clear1CameraMove : MonoBehaviour
     bool isMove = false;
     Vector3 originPos;
     Quaternion originRot;
-
+    public GameObject option;
     bool checkEnemy = false;
-
+    public GameObject hpBar;
+    public GameObject mpBar;
     void Start()
     {
         player = GameObject.Find("Player");
@@ -78,10 +79,16 @@ public class Clear1CameraMove : MonoBehaviour
                 curTime += Time.deltaTime;
                 if (curTime > maxTime)
                 {
-                    UiInter.SetActive(false);
+                    if (Imotal.instance.isKeyBorad == false)
+                    {
+                        UiInter.SetActive(false);
+                    }
+                    option.SetActive(false);
                     player.SetActive(false);
-                    cameraRig.transform.position = Vector3.Lerp(cameraRig.transform.position, transform.position, 0.5f * Time.deltaTime);
-                    cameraRig.transform.rotation = Quaternion.Lerp(cameraRig.transform.rotation, transform.rotation, 0.5f * Time.deltaTime);
+                    hpBar.SetActive(false);
+                    mpBar.SetActive(false);
+                    cameraRig.transform.position = Vector3.Lerp(cameraRig.transform.position, transform.position, 1f * Time.deltaTime);
+                    cameraRig.transform.rotation = Quaternion.Lerp(cameraRig.transform.rotation, transform.rotation, 1f * Time.deltaTime);
                 }
             }
 
@@ -104,8 +111,14 @@ public class Clear1CameraMove : MonoBehaviour
     {
         endCameraMove = true;
             cameraRig.GetComponent<FollowCam>().enabled = true;
-        UiInter.SetActive(true);
+        if (Imotal.instance.isKeyBorad == false)
+        {
+            UiInter.SetActive(true);
+        }
         player.SetActive(true);
+        option.SetActive(true);
+        hpBar.SetActive(true);
+        mpBar.SetActive(true);
         cameraRig.transform.position = originPos;
             cameraRig.transform.rotation = originRot;
             startCameraMove = false;

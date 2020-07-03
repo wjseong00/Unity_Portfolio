@@ -10,7 +10,7 @@ public class BossCtrl : MonoBehaviour
     public Canvas canvas;
     enum AttackPattern
     {
-        idle,fly,laser,frost
+        idle,fly,fire,frost
     }
     AttackPattern state;
     AttackPattern preState;
@@ -99,7 +99,7 @@ public class BossCtrl : MonoBehaviour
                 FrostAttack();
                 break;
             
-            case AttackPattern.laser:
+            case AttackPattern.fire:
                 FireAttack();
                 break;
             default:
@@ -113,7 +113,7 @@ public class BossCtrl : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Y))
         {
             ValueReset();
-            state = AttackPattern.laser;
+            state = AttackPattern.fire;
         }
         if (Input.GetKeyDown(KeyCode.U))
         {
@@ -157,7 +157,7 @@ public class BossCtrl : MonoBehaviour
                
                 
                 ValueReset();
-                state = (AttackPattern)Random.Range(1,4);
+                state = AttackPattern.fire;
                 
                 
             }
@@ -245,7 +245,7 @@ public class BossCtrl : MonoBehaviour
             player.GetComponent<PlayerDamage>().fire(false);
             blast.SetActive(false);
             ValueReset();
-            state = (AttackPattern)Random.Range(1, 4);
+            state = AttackPattern.frost;
             
             
         }
@@ -275,7 +275,7 @@ public class BossCtrl : MonoBehaviour
     void changeState()
     {
         anim.SetBool("TornadoAttack", false);
-        state = (AttackPattern)Random.Range(1, 4);
+        state = AttackPattern.fly;
 
     }
 

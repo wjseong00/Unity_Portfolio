@@ -14,9 +14,11 @@ public class PlayerBossScene : MonoBehaviour
     float curTime = 0f;
     float arriveTime = 4f;
     float moveSpeed = 0.6f;
+    bool run = false;
     private void Start()
     {
         anim = GetComponent<Animator>();
+        cc = GetComponent<CharacterController>();
     }
 
     private void Update()
@@ -28,14 +30,16 @@ public class PlayerBossScene : MonoBehaviour
         curTime += Time.deltaTime;
         if(curTime>arriveTime)
         {
+            run = true ;
             anim.SetBool("Walk", false);
             GetComponent<PlayerBossScene>().enabled = false;
             camPos1.SetActive(false);
             camPos2.SetActive(true);
             boss.gameObject.SetActive(true);
+            boss.GetComponent<BossMoveScene>().enabled = true;
 
         }
-        else
+        if(!run)
         {
             Vector3 dir = (portal.transform.position - startPos.transform.position).normalized;
             dir.y = 0;

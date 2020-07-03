@@ -10,12 +10,14 @@ public class JoyStick : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, I
     private float radius;
 
     [SerializeField] private GameObject go_Player;
-    [SerializeField] private float moveSpeed;
+    [SerializeField] public float moveSpeed;
 
     public Vector2 value;
     public Animator anim;
+    public float aniSpeed = 1.5f;
     private bool isTouch = false;
     private Vector3 movePosition;
+    public bool stun = false;
 
     // Start is called before the first frame update
     void Start()
@@ -28,9 +30,13 @@ public class JoyStick : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, I
     {
         if(isTouch)
         {
-            anim.SetBool("Run", true);
-            go_Player.transform.position += movePosition;
-            go_Player.transform.rotation = Quaternion.LookRotation(movePosition);
+            if(!stun)
+            {
+                anim.SetBool("Run", true);
+                go_Player.transform.position += movePosition;
+                go_Player.transform.rotation = Quaternion.LookRotation(movePosition);
+            }
+            
         }
         else
         {

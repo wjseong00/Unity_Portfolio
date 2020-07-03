@@ -10,6 +10,7 @@ public class Clear2CameraMove : MonoBehaviour
 
     public GameObject UiInter;
     public GameObject[] bridge;
+    public GameObject smokeFactory;
     GameObject player;
 
     public bool startCameraMove = false;
@@ -23,6 +24,10 @@ public class Clear2CameraMove : MonoBehaviour
     float curTime = 0f;
     float maxTime = 2f;
     bool isMove = false;
+    bool start = false;
+    public GameObject option;
+    public GameObject hpBar;
+    public GameObject mpBar;
     void Start()
     {
         player = GameObject.Find("Player");
@@ -79,10 +84,16 @@ public class Clear2CameraMove : MonoBehaviour
                 curTime += Time.deltaTime;
                 if (curTime > maxTime)
                 {
-                    UiInter.SetActive(false);
+                    if (Imotal.instance.isKeyBorad == false)
+                    {
+                        UiInter.SetActive(false);
+                    }
+                    hpBar.SetActive(false);
+                    mpBar.SetActive(false);
+                    option.SetActive(false);
                     player.SetActive(false);
-                    cameraRig.transform.position = Vector3.Lerp(cameraRig.transform.position, transform.position, 0.5f * Time.deltaTime);
-                    cameraRig.transform.rotation = Quaternion.Lerp(cameraRig.transform.rotation, transform.rotation, 0.5f * Time.deltaTime);
+                    cameraRig.transform.position = Vector3.Lerp(cameraRig.transform.position, transform.position, 1f * Time.deltaTime);
+                    cameraRig.transform.rotation = Quaternion.Lerp(cameraRig.transform.rotation, transform.rotation, 1f * Time.deltaTime);
                 }
             }
             
@@ -92,7 +103,12 @@ public class Clear2CameraMove : MonoBehaviour
             if (Vector3.Distance(cameraRig.transform.position, transform.position) < 0.2f)
             {
                 isMove = true;
-                StartCoroutine(showBlock());
+                if(!start)
+                {
+                    StartCoroutine(showBlock());
+                    start =true;
+                }
+                
                 
 
             }
@@ -103,19 +119,37 @@ public class Clear2CameraMove : MonoBehaviour
     IEnumerator showBlock()
     {
         bridge[0].SetActive(true);
+        GameObject smoke = Instantiate(smokeFactory);
+        smoke.transform.position = bridge[0].transform.position;
+        Destroy(smoke, 1f);
         yield return new WaitForSeconds(0.4f);
         bridge[1].SetActive(true);
+        GameObject smoke1 = Instantiate(smokeFactory);
+        smoke1.transform.position = bridge[1].transform.position;
+        Destroy(smoke1, 1f);
         yield return new WaitForSeconds(0.4f);
         bridge[2].SetActive(true);
+        GameObject smoke2 = Instantiate(smokeFactory);
+        smoke2.transform.position = bridge[2].transform.position;
+        Destroy(smoke2, 1f);
         yield return new WaitForSeconds(0.4f);
         bridge[3].SetActive(true);
+        GameObject smoke3 = Instantiate(smokeFactory);
+        smoke3.transform.position = bridge[3].transform.position;
+        Destroy(smoke3, 1f);
         yield return new WaitForSeconds(0.4f);
         endCameraMove = true;
         
         cameraRig.GetComponent<FollowCam>().enabled = true;
-        UiInter.SetActive(true);
-        player.SetActive(true);
+        if(Imotal.instance.isKeyBorad== false)
+        {
+            UiInter.SetActive(true);
+        }
         
+        player.SetActive(true);
+        option.SetActive(true);
+        hpBar.SetActive(true);
+        mpBar.SetActive(true);
         cameraRig.transform.position = originPos;
         cameraRig.transform.rotation = originRot;
         startCameraMove = false;
