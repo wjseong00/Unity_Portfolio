@@ -12,7 +12,12 @@ public class InventoryUI : MonoBehaviour
     public Transform slotHolder;
     public ShopSlot[] shopSlots;
     public Transform shopHolder;
-    
+    public GameObject Ui;
+    public GameObject KUi;
+
+
+    public GameObject hpBar;
+    public GameObject speak;
     private void Start()
     {
         inven = Inventory.instance;
@@ -107,6 +112,17 @@ public class InventoryUI : MonoBehaviour
     }
     public void DeActiveShop()
     {
+        if(Imotal.instance.isKeyBorad==false)
+        {
+            Ui.SetActive(true);
+        }
+        else
+        {
+            KUi.SetActive(true);
+        }
+        Time.timeScale = 1;
+        speak.SetActive(true);
+        hpBar.SetActive(true);
         ActiveShop(false);
         shopData = null;
         for (int i = 0; i < shopSlots.Length; i++)

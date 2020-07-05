@@ -5,6 +5,7 @@ using UnityEngine;
 public class FireBlast : MonoBehaviour
 {
     Transform player;
+    
     private void Start()
     {
         player = GameObject.Find("Player").transform;

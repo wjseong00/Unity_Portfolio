@@ -14,8 +14,15 @@ public class PlayerAttack : MonoBehaviour
     public GameObject normalAttackMotion;
     private Animator anim;
 
+    public GameObject fireCoolTime;
+    public GameObject iceCoolTime;
+    public GameObject normalCoolTime;
+
+
+
     public float mp = 100f;
     public float initMp = 100f;
+    public Image mpBar;
     float minDistance = 9999f; //가장 가까이있는 타겟 구하기
     Vector3 dir;        //타겟의 방향
     Vector3 target;     //타겟의 벡터값
@@ -38,20 +45,66 @@ public class PlayerAttack : MonoBehaviour
             normalMissile.Add(bullet);
         }
 
+
     }
 
     // Update is called once per frame
     void Update()
     {
-        if(!stun)
+        mpBar.fillAmount = mp / initMp;
+        if (!stun)
         {
             //Normal();
             //Fire();
-            if (Input.GetKeyDown(KeyCode.P))
+            if(mp<100f)
             {
-
-                StartCoroutine(FireAttack());
+                mp += 0.1f;
             }
+            
+            mpBar.fillAmount = mp / initMp;
+            if(Imotal.instance.isKeyBorad==true)
+            {
+                
+                if (Input.GetKeyDown(KeyCode.R))
+                {
+                    if(fireCoolTime.GetComponent<CoolTime>().image.gameObject.activeSelf==false)
+                    {
+                        if (mp > 50)
+                        {
+                            mp -= 50;
+                            mpBar.fillAmount = mp / initMp;
+                            fireCoolTime.GetComponent<CoolTime>().StartCoolTime();
+                            StartCoroutine(FireAttack());
+                        }
+
+                        
+                    }
+                    
+                }
+                if (Input.GetKeyDown(KeyCode.T))
+                {
+                    if (iceCoolTime.GetComponent<CoolTime>().image.gameObject.activeSelf == false)
+                    {
+                        
+                            mpBar.fillAmount = mp / initMp;
+                            iceCoolTime.GetComponent<CoolTime>().StartCoolTime();
+                            Ice();
+                        
+                    }
+                }
+                if (Input.GetMouseButtonDown(0))
+                {
+                    if (normalCoolTime.GetComponent<CoolTime>().image.gameObject.activeSelf == false)
+                    {
+                        
+                            mpBar.fillAmount = mp / initMp;
+                            normalCoolTime.GetComponent<CoolTime>().StartCoolTime();
+                            Normal();
+                        
+                    }
+                }
+            }
+           
             //Ice();
         }
         
@@ -62,87 +115,98 @@ public class PlayerAttack : MonoBehaviour
     {
         //if(Input.GetKeyDown(KeyCode.O))
         {
-            minDistance = 9999f;
+            if (mp > 20)
+            {
+                mp -= 20;
+                mpBar.fillAmount = mp / initMp;
+                minDistance = 9999f;
 
-            Collider[] cols = Physics.OverlapSphere(transform.position, 8f, 1 << 11);
-            if (cols.Length <= 0)
-            {
-                Debug.Log("대상이 존재하지 않음");
-            }
-            else
-            {
-                //anim.SetBool("FireAttack", true);
-                GameObject motion = Instantiate(iceAttackMotion, GameObject.Find("Player").transform);
-                motion.transform.position = transform.position + new Vector3(0, 0.3f, 0);
-                Destroy(motion, 1f);
-                GameObject ice = Instantiate(iceWall);
-                for (int i = 0; i < cols.Length; i++)
+                Collider[] cols = Physics.OverlapSphere(transform.position, 8f, 1 << 11);
+                if (cols.Length <= 0)
                 {
-
-                    if (cols[i].tag == "Enemy")
+                    
+                }
+                else
+                {
+                    //anim.SetBool("FireAttack", true);
+                    GameObject motion = Instantiate(iceAttackMotion, GameObject.Find("Player").transform);
+                    motion.transform.position = transform.position + new Vector3(0, 0.3f, 0);
+                    Destroy(motion, 1f);
+                    GameObject ice = Instantiate(iceWall);
+                    for (int i = 0; i < cols.Length; i++)
                     {
-                        float distance = Vector3.Distance(cols[i].transform.position, transform.position);
-                        if (distance < minDistance)
+
+                        if (cols[i].tag == "Enemy")
                         {
-                            minDistance = distance;
-                            dir = cols[i].transform.position - transform.position;
-                            target = cols[i].transform.position;
+                            float distance = Vector3.Distance(cols[i].transform.position, transform.position);
+                            if (distance < minDistance)
+                            {
+                                minDistance = distance;
+                                dir = cols[i].transform.position - transform.position;
+                                target = cols[i].transform.position;
+                            }
                         }
                     }
+                    ice.transform.position = target;
+                    //Destroy(ice, 1f);
+
+
                 }
-                ice.transform.position = target;
-                //Destroy(ice, 1f);
-
-
             }
         }
     }
     public void FireBall()
     {
-        StartCoroutine(FireAttack());
+        if (mp > 50)
+        {
+            mp -= 50;
+            StartCoroutine(FireAttack());
+        }
     }
     public void Fire()
     {
         //if(Input.GetKeyDown(KeyCode.P))
         {
             
-            minDistance = 9999f;
+                mpBar.fillAmount = mp / initMp;
+                minDistance = 9999f;
 
-            Collider[] cols = Physics.OverlapSphere(transform.position, 8f, 1 << 11);
-            if (cols.Length <= 0)
-            {
-                Debug.Log("대상이 존재하지 않음");
-            }
-            else
-            {
-                anim.SetBool("FireAttack", true);
-                GameObject motion = Instantiate(fireAttackMotion, GameObject.Find("Player").transform);
-                motion.transform.position = transform.position + new Vector3(0, 0.3f, 0);
-                Destroy(motion, 1f);
-                GameObject fire = Instantiate(fireBall);
-                for (int i = 0; i < cols.Length; i++)
+                Collider[] cols = Physics.OverlapSphere(transform.position, 8f, 1 << 11);
+                if (cols.Length <= 0)
                 {
-
-                    if (cols[i].tag == "Enemy")
+                    
+                }
+                else
+                {
+                    anim.SetBool("FireAttack", true);
+                    GameObject motion = Instantiate(fireAttackMotion, GameObject.Find("Player").transform);
+                    motion.transform.position = transform.position + new Vector3(0, 0.3f, 0);
+                    Destroy(motion, 1f);
+                    GameObject fire = Instantiate(fireBall);
+                    for (int i = 0; i < cols.Length; i++)
                     {
-                        float distance = Vector3.Distance(cols[i].transform.position, transform.position);
-                        if (distance < minDistance)
+
+                        if (cols[i].tag == "Enemy")
                         {
-                            minDistance = distance;
-                            dir = cols[i].transform.position - transform.position;
-                            target = cols[i].transform.position;
+                            float distance = Vector3.Distance(cols[i].transform.position, transform.position);
+                            if (distance < minDistance)
+                            {
+                                minDistance = distance;
+                                dir = cols[i].transform.position - transform.position;
+                                target = cols[i].transform.position;
+                            }
                         }
                     }
+                    fire.transform.position = target + new Vector3(Random.Range(2, 10), 10, Random.Range(2, 10));
+                    Vector3 fdir = target - fire.transform.position;
+                    fdir.Normalize();
+                    Quaternion qdir = Quaternion.LookRotation(fdir);
+                    fire.transform.rotation = qdir;
+                    Destroy(fire, 1f);
+
+
                 }
-                fire.transform.position = target + new Vector3(Random.Range(2, 10), 10, Random.Range(2, 10));
-                Vector3 fdir =target - fire.transform.position;
-                fdir.Normalize();
-                Quaternion qdir = Quaternion.LookRotation(fdir);
-                fire.transform.rotation = qdir;
-                Destroy(fire,1f);
-                
-                
-            }
+            
         }
     }
     public IEnumerator FireAttack()
@@ -162,20 +226,25 @@ public class PlayerAttack : MonoBehaviour
     {
         //if(Input.GetMouseButtonDown(0))
         {
-            //anim.SetBool("NormalAttack", true);
-            anim.SetTrigger("Attack");
-            normalMissile[missileIndex].SetActive(true);
-            normalMissile[missileIndex].transform.position = attackPos.position;
-            normalMissile[missileIndex].transform.rotation = attackPos.rotation;
-            missileIndex++;
+            if (mp > 1)
+            {
 
-            if (missileIndex >= missileSize) missileIndex = 0;
-            GameObject motion = Instantiate(normalAttackMotion,GameObject.Find("Player").transform);
-            
-            motion.transform.position = transform.position + new Vector3(0,0.3f,0);
+                mp -= 1;
+                //anim.SetBool("NormalAttack", true);
+                anim.SetTrigger("Attack");
+                normalMissile[missileIndex].SetActive(true);
+                normalMissile[missileIndex].transform.position = attackPos.position;
+                normalMissile[missileIndex].transform.rotation = attackPos.rotation;
+                missileIndex++;
 
-            
-            Destroy(motion, 1f);
+                if (missileIndex >= missileSize) missileIndex = 0;
+                GameObject motion = Instantiate(normalAttackMotion, GameObject.Find("Player").transform);
+
+                motion.transform.position = transform.position + new Vector3(0, 0.3f, 0);
+
+
+                Destroy(motion, 1f);
+            }
             
         }
         //if(Input.GetMouseButtonUp(0))

@@ -9,6 +9,7 @@ public class Clear2CameraMove : MonoBehaviour
     int enemyCount = 0;
 
     public GameObject UiInter;
+    public GameObject KUiInter;
     public GameObject[] bridge;
     public GameObject smokeFactory;
     GameObject player;
@@ -27,7 +28,7 @@ public class Clear2CameraMove : MonoBehaviour
     bool start = false;
     public GameObject option;
     public GameObject hpBar;
-    public GameObject mpBar;
+
     void Start()
     {
         player = GameObject.Find("Player");
@@ -88,8 +89,12 @@ public class Clear2CameraMove : MonoBehaviour
                     {
                         UiInter.SetActive(false);
                     }
+                    else
+                    {
+                        KUiInter.SetActive(false);
+                    }
                     hpBar.SetActive(false);
-                    mpBar.SetActive(false);
+
                     option.SetActive(false);
                     player.SetActive(false);
                     cameraRig.transform.position = Vector3.Lerp(cameraRig.transform.position, transform.position, 1f * Time.deltaTime);
@@ -145,11 +150,14 @@ public class Clear2CameraMove : MonoBehaviour
         {
             UiInter.SetActive(true);
         }
-        
+        else
+        {
+            KUiInter.SetActive(true);
+        }
         player.SetActive(true);
         option.SetActive(true);
         hpBar.SetActive(true);
-        mpBar.SetActive(true);
+
         cameraRig.transform.position = originPos;
         cameraRig.transform.rotation = originRot;
         startCameraMove = false;

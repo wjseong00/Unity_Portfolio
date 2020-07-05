@@ -18,7 +18,7 @@ public class ItemDatabase : MonoBehaviour
 
     private void Start()
     {
-        money = 10000;
+        money = 0;
         key.GetComponent<FieldItems>().SetItem(itemDB[0]);
         healkit.GetComponent<FieldItems>().SetItem(itemDB[1]);
     }

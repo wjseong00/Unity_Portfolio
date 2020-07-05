@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -10,7 +11,7 @@ public class BossCtrl : MonoBehaviour
     public Canvas canvas;
     enum AttackPattern
     {
-        idle,fly,fire,frost
+        idle,fly,fire,frost,die
     }
     AttackPattern state;
     AttackPattern preState;
@@ -24,7 +25,7 @@ public class BossCtrl : MonoBehaviour
     float initHp = 500f;
     public GameObject hudDamageText;
     public Transform hudPos;
-
+    public GameObject hpBar;
     #region "썬더공격에 대한 함수"
 
     public GameObject Thunder;
@@ -60,17 +61,17 @@ public class BossCtrl : MonoBehaviour
     public GameObject FrostFactory;
 
     float curFrost = 0f;
-    float endFrost = 2.0f;
+    float endFrost = 3.0f;
     public Transform forLocate1;
     public Transform forLocate2;
-    bool crefor = false;
+
     
     #endregion
 
     void Start()
     {
         player = GameObject.Find("Player").transform;
-        state = (AttackPattern)Random.Range(1,4);
+        state = AttackPattern.fly;
         cc = GetComponent<CharacterController>();
         blast = Instantiate(blastFactory);
         blast.SetActive(false);
@@ -102,24 +103,12 @@ public class BossCtrl : MonoBehaviour
             case AttackPattern.fire:
                 FireAttack();
                 break;
+            case AttackPattern.die:
+                break;
             default:
                 break;
         }
-        if(Input.GetKeyDown(KeyCode.T))
-        {
-            ValueReset();
-            state =AttackPattern.fly;
-        }
-        if (Input.GetKeyDown(KeyCode.Y))
-        {
-            ValueReset();
-            state = AttackPattern.fire;
-        }
-        if (Input.GetKeyDown(KeyCode.U))
-        {
-            ValueReset();
-            state = AttackPattern.frost;
-        }
+        
     }
 
     
@@ -128,7 +117,8 @@ public class BossCtrl : MonoBehaviour
     {
         upTime = 0f;
         DownTime = 0f;
-        crefor = false;
+        fireTime = 0f;
+
         curTime = 0f;
         curTimeChange = 0f;
         curFrost = 0f;
@@ -154,11 +144,8 @@ public class BossCtrl : MonoBehaviour
             else
             {
                 
-               
-                
                 ValueReset();
                 state = AttackPattern.fire;
-                
                 
             }
             
@@ -198,10 +185,7 @@ public class BossCtrl : MonoBehaviour
                                 Destroy(thunT, 0.7f);
                                 Invoke("ThunderAttack", 0.7f);
                             }
-                            else
-                            {
-                                anim.SetBool("FlyAttack", false);
-                            }
+                            
                         }
                     }
 
@@ -217,7 +201,9 @@ public class BossCtrl : MonoBehaviour
         StartCoroutine(shake.ShakeCamera());
         GameObject Thun = Instantiate(Thunder);
         Thun.transform.position = preTarget;
+        anim.SetBool("FlyAttack", false);
         Destroy(Thun, 0.5f);
+
     }
     
     
@@ -240,7 +226,7 @@ public class BossCtrl : MonoBehaviour
         fireTime += Time.deltaTime;
         if(fireTime>usingFire)
         {
-            fireTime = 0f;
+            
             anim.SetBool("FireAttack", false);
             player.GetComponent<PlayerDamage>().fire(false);
             blast.SetActive(false);
@@ -283,6 +269,12 @@ public class BossCtrl : MonoBehaviour
     {
         hp--;
         Hpbar.fillAmount = hp / initHp;
+        if (hp < 0)
+        {
+            anim.SetTrigger("Die");
+            state = AttackPattern.die;
+            Die();
+        }
         //hpBarImage.fillAmount = hp / initHp;
 
     }
@@ -298,8 +290,27 @@ public class BossCtrl : MonoBehaviour
         hudText.transform.localPosition = ScreenPos; // 표시될 위치
         hudText.transform.SetParent(canvas.transform);
         hudText.GetComponent<DamageText>().damage = value; // 데미지 전달
+        if(hp<0)
+        {
+            anim.SetTrigger("Die");
+            state = AttackPattern.die;
+            Die();
+        }
+
     }
 
-
-
+    private void Die()
+    {
+        blast.SetActive(false);
+        cc.enabled = true;
+        hpBar.SetActive(false);
+        player.GetComponent<PlayerMoney>().isBossKill = true;
+        StopAllCoroutines();
+        StartCoroutine(DieProc());
+    }
+    IEnumerator DieProc()
+    {
+        yield return new WaitForSeconds(3f);
+        BossShow.instance.bossStart = false;
+    }
 }

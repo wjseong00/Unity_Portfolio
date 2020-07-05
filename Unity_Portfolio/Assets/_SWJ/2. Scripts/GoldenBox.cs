@@ -7,10 +7,12 @@ public class GoldenBox : MonoBehaviour
     public GameObject itemFactory;
     GameObject player;
     Animation anim;
+    AudioSource sound;
     bool isOpen = false;
     void Start()
     {
         player = GameObject.Find("Player");
+        sound = GetComponent<AudioSource>();
         anim = GetComponent<Animation>();
     }
     private void Update()
@@ -25,6 +27,7 @@ public class GoldenBox : MonoBehaviour
                    
                     if(Input.GetKeyDown(KeyCode.F)&&!isOpen)
                     {
+                        sound.Play();
                         isOpen = true;
                         anim.Play();
                         GameObject item = Instantiate(itemFactory);

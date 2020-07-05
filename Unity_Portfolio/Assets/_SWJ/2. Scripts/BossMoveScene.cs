@@ -5,7 +5,7 @@ using UnityEngine;
 public class BossMoveScene : MonoBehaviour
 {
     Animator anim;
-    
+    //private Shake shake;
 
     float curTime = 0f;
    
@@ -18,6 +18,7 @@ public class BossMoveScene : MonoBehaviour
     private void Start()
     {
         anim = GetComponent<Animator>();
+        //shake = GameObject.Find("Pos").GetComponent<Shake>();
     }
 
     
@@ -29,9 +30,11 @@ public class BossMoveScene : MonoBehaviour
         curTime += Time.deltaTime;
         if (curTime > arriveTime)
         {
+            
             anim.SetBool("Walk", false);
             if(!hawling)
             {
+                //StartCoroutine(shake.ShakeCamera());
                 anim.SetTrigger("Hawling");
                 hawling = true;
 

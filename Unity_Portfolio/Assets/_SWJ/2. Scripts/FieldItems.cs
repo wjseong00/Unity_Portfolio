@@ -7,8 +7,10 @@ public class FieldItems : MonoBehaviour
     Rigidbody rig;
     public Item item;
     public Image image;
+    //AudioSource sound;
     private void Start()
     {
+        //sound = GetComponent<AudioSource>();
         rig = GetComponent<Rigidbody>();
         rig.AddForce(Vector3.up * 250f);
     }
@@ -29,6 +31,7 @@ public class FieldItems : MonoBehaviour
 
     public void DestroyItem()
     {
+        
         Destroy(gameObject);
     }
         

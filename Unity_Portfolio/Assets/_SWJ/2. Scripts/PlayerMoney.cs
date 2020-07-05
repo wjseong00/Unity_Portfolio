@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class PlayerMoney : MonoBehaviour
 {
-    public int coinCount=0;
+    public bool isBossKill = false;
     public bool isKey = false;
     public bool isItem = false;
     void Start()
@@ -17,14 +17,7 @@ public class PlayerMoney : MonoBehaviour
     {
         
     }
-    public void AddCoin(int value)
-    {
-        coinCount+=value;
-    }
-    public void MinusCoin()
-    {
-        coinCount--;
-    }
+    
     
     
 }

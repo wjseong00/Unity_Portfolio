@@ -1,8 +1,9 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-
+using UnityEngine.SceneManagement;
 public class PlayerDamage : MonoBehaviour
 {
     public GameObject stunFactory;
@@ -13,6 +14,7 @@ public class PlayerDamage : MonoBehaviour
     Animator anim;
     public bool isFire = false;
     public bool isFreeze = false;
+    public bool isDie = false;
     private void Start()
     {
         anim=GetComponent<Animator>();
@@ -21,6 +23,15 @@ public class PlayerDamage : MonoBehaviour
     {
         hp--;
         hpBar.fillAmount = hp / initHp;
+        if (hp < 0)
+        {
+            isDie = true;
+            StopAllCoroutines();
+            anim.SetBool("Stun", false);
+            CancelInvoke("minusHp");
+            anim.SetTrigger("Die");
+            Die();
+        }
 
     }
     IEnumerator delay()
@@ -30,37 +41,70 @@ public class PlayerDamage : MonoBehaviour
         anim.SetBool("Damage", false);
     }
 
-    public void hitDamage(int value)
+    public void hitDamage(float value)
     {
-        
-        
-        for (int i = 0; i < value; i++)
+
+        if (!isDie)
         {
-            Invoke("minusHp", i / 10);
+            
+            for (float i = 0; i < value; i++)
+            {
+                Invoke("minusHp", i / value);
+                hpBar.fillAmount = hp / initHp;
+            }
+            if (hp < 0)
+            {
+                anim.SetBool("Stun", false);
+                isDie = true;
+                CancelInvoke("minusHp");
+                StopAllCoroutines();
+                anim.SetTrigger("Die");
+                Die();
+            }
         }
-        Debug.Log("플레이어 피 " + hp);
 
     }
-    public void StunPlayer(int value)
+
+    private void Die()
     {
+        StopAllCoroutines();
         
-        anim.SetBool("Stun", true);
-        GameObject stun = Instantiate(stunFactory,transform);
-        stun.transform.position = transform.position + new Vector3(0, 0.6f, 0);
-        
-        Destroy(stun, 1.5f);
-        if (GetComponent<PlayerAttack>().stun == true)
-        {
-            StopAllCoroutines();
-        }
-        StartCoroutine(isStun(value));
+        StartCoroutine(DieProc());
     }
-    IEnumerator isStun(int value)
+    IEnumerator DieProc()
+    {
+        GetComponent<PlayerAttack>().enabled =false;
+        GetComponent<PlayerMove>().enabled = false;
+        joystick.GetComponent<JoyStick>().enabled = false;
+        yield return new WaitForSeconds(5f);
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+
+    }
+    public void StunPlayer(float value)
+    {
+        if(!isDie)
+        {
+            anim.SetBool("Stun", true);
+            GameObject stun = Instantiate(stunFactory, transform);
+            stun.transform.position = transform.position + new Vector3(0, 0.6f, 0);
+
+            Destroy(stun, 1.5f);
+            if (GetComponent<PlayerAttack>().stun == true)
+            {
+                StopAllCoroutines();
+            }
+            StartCoroutine(isStun(value));
+        }
+        
+    }
+    IEnumerator isStun(float value)
     {
         for (int i = 0; i < value; i++)
         {
-            Invoke("minusHp", i / 10);
+            Invoke("minusHp", i / value);
+            hpBar.fillAmount = hp / initHp;
         }
+        
         GetComponent<PlayerAttack>().setStun(true);
         GetComponent<PlayerMove>().setStun(true);
         joystick.GetComponent<JoyStick>().stun=true;
@@ -77,8 +121,15 @@ public class PlayerDamage : MonoBehaviour
         {
             hp-=0.2f;
             hpBar.fillAmount = hp / initHp;
+            if (hp < 0)
+            {
+                isFire = false;
+                anim.SetTrigger("Die");
+                Die();
+            }
         }
         
+
     }
     public void fire(bool _fire)
     {

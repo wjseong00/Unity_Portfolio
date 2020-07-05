@@ -9,7 +9,7 @@ public class HpBarScript : MonoBehaviour
     private Canvas canvas;
     private RectTransform rectParent;
     private RectTransform rectHp;
-
+   
     [HideInInspector] public Vector3 offset = Vector3.zero;
     [HideInInspector] public Transform targetTr;
 
@@ -24,16 +24,23 @@ public class HpBarScript : MonoBehaviour
 
     private void LateUpdate()
     {
-        var screenPos = Camera.main.WorldToScreenPoint(targetTr.position + offset);
+        
+            var screenPos = Camera.main.WorldToScreenPoint(targetTr.position + offset);
+            if (screenPos.z < 0.0f)
+            {
+                screenPos *= -1.0f;
+            }
+            var localPos = Vector2.zero;
+            RectTransformUtility.ScreenPointToLocalPointInRectangle(rectParent, screenPos, uiCamera, out localPos);
 
-        if(screenPos.z<0.0f)
-        {
-            screenPos *= -1.0f;
-        }
-        var localPos = Vector2.zero;
-        RectTransformUtility.ScreenPointToLocalPointInRectangle(rectParent, screenPos, uiCamera,out localPos);
+            rectHp.localPosition = localPos;
+        
 
-        rectHp.localPosition = localPos;
+        
+        
+        
+
+        
 
     }
 }

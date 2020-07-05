@@ -9,6 +9,7 @@ public class ChangeMode : MonoBehaviour
     public Sprite key;
     public GameObject player;
     public GameObject Canvas;
+    public GameObject KUiCanvas;
     
     Image main;
    
@@ -25,18 +26,23 @@ public class ChangeMode : MonoBehaviour
     }
     public void Update()
     {
-        if (Imotal.instance.isKeyBorad == true)
+        if(GameObject.Find("Inventory Canvas").GetComponent<InventoryUI>().isStoreActive == false && GameObject.Find("Npc").GetComponent<NpcQuestion>().isUse==false)
         {
-            main.sprite = key;
-            Canvas.SetActive(false);
-            
+            if (Imotal.instance.isKeyBorad == true)
+            {
+                main.sprite = key;
+                Canvas.SetActive(false);
+                KUiCanvas.SetActive(true);
+            }
+            else
+            {
+                main.sprite = game;
+                Canvas.SetActive(true);
+                KUiCanvas.SetActive(false);
+
+            }
         }
-        else
-        {
-            main.sprite = game;
-            Canvas.SetActive(true);
-            
-        }
+        
         
     }
 }

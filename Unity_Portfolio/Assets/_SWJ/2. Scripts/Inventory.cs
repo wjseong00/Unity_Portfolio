@@ -6,7 +6,9 @@ public class Inventory : MonoBehaviour
 {
     public bool bossShow = false;
     public bool bossEnd = false;
+    public AudioSource sound;
     public static Inventory instance;
+    
     private void Awake()
     {
         if(instance!=null)
@@ -36,11 +38,16 @@ public class Inventory : MonoBehaviour
 
         }
     }
-
+    private void Update()
+    {
+        sound.volume = SoundManager.instance.efVolume;
+    }
 
     void Start()
     {
-        SlotCnt = 4;
+        
+        
+        SlotCnt = 6;
     }
 
     public bool AddItem(Item _item)
@@ -69,12 +76,23 @@ public class Inventory : MonoBehaviour
     {
         if(other.CompareTag("FieldItem"))
         {
-            FieldItems fieldItems = other.GetComponent<FieldItems>();
-            if (AddItem(fieldItems.GetItem()))
+            sound.Play();
+            if (other.gameObject.name.Contains("Coin"))
             {
-                fieldItems.DestroyItem();
-                
+                ItemDatabase.instance.money += 100;
+                Destroy(other.gameObject);
             }
+            else
+            {
+                FieldItems fieldItems = other.GetComponent<FieldItems>();
+                if (AddItem(fieldItems.GetItem()))
+                {
+                    fieldItems.DestroyItem();
+
+                }
+            }
+            
+            
         }
         
     }

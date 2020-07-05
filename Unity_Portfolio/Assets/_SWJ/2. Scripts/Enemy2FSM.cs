@@ -61,8 +61,8 @@ public class Enemy2FSM : MonoBehaviour
     public GameObject deathFactory;
 
     //몬스터 일반변수
-    float hp = 100f;//체력
-    float initHp = 100f;
+    float hp = 20f;//체력
+    float initHp = 20f;
     int att = 5;//공격력
     float speed = 5.0f;//이동속도
 
@@ -390,7 +390,7 @@ public class Enemy2FSM : MonoBehaviour
         Destroy(hpBar);
         Destroy(gameObject);
         Destroy(death, 2f);
-        Destroy(coin, 6f);
+        Destroy(coin, 14f);
         //Destroy(gameObject);
     }
 

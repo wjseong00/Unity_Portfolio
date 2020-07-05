@@ -12,11 +12,13 @@ public class FadeIn : MonoBehaviour
     public GameObject cameraRig;
     public GameObject player;
     public GameObject UiInter;
+    public GameObject KUiInter;
     public GameObject camPos1;
     public GameObject joyStick;
 
+
+
     public GameObject hpBar;
-    public GameObject mpBar;
     public GameObject option;
 
     void Update()
@@ -30,9 +32,11 @@ public class FadeIn : MonoBehaviour
             cameraRig.GetComponent<FollowCam>().enabled = false;
             player.GetComponent<PlayerMove>().enabled = false;
             player.GetComponent<PlayerAttack>().enabled = false;
+            joyStick.GetComponent<JoyStick>().Reset();
             joyStick.GetComponent<JoyStick>().enabled = false;
+            
             hpBar.SetActive(false);
-            mpBar.SetActive(false);
+
             option.SetActive(false);
             anim.SetBool("Run", false);
             anim.SetBool("Jump", false);
@@ -46,6 +50,10 @@ public class FadeIn : MonoBehaviour
             if (Imotal.instance.isKeyBorad == false)
             {
                 UiInter.SetActive(false);
+            }
+            else
+            {
+                KUiInter.SetActive(false);
             }
             player.GetComponent<PlayerBossScene>().enabled = true;
             GetComponent<FadeIn>().enabled = false;

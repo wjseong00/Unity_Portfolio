@@ -10,13 +10,14 @@ public class BossSceneEnd : MonoBehaviour
     public GameObject cameraRig;
     public GameObject player;
     public GameObject UiInter;
+    public GameObject KUiInter;
     public GameObject mainCamera;
     public GameObject startPos;
     public GameObject bossHp;
     public GameObject joyStick;
     public GameObject hpBar;
-    public GameObject mpBar;
     public GameObject option;
+
     void Start()
     {
         
@@ -37,16 +38,21 @@ public class BossSceneEnd : MonoBehaviour
             {
                 UiInter.SetActive(true);
             }
+            else
+            {
+                KUiInter.SetActive(true);
+            }
             cameraRig.GetComponent<FollowCam>().enabled = true;
             player.GetComponent<PlayerMove>().enabled = true;
             joyStick.GetComponent<JoyStick>().enabled = true;
             player.GetComponent<PlayerAttack>().enabled = true;
+           
             GetComponent<BossCtrl>().enabled = true;
             startPos.GetComponent<BossShow>().enabled = false;
             bossHp.SetActive(true);
             GetComponent<BossSceneEnd>().enabled = false;
             hpBar.SetActive(true);
-            mpBar.SetActive(true);
+  
             option.SetActive(true);
 
 

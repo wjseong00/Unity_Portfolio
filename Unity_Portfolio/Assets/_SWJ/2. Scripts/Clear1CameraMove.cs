@@ -9,6 +9,7 @@ public class Clear1CameraMove : MonoBehaviour
     int enemyCount = 0;
 
     public GameObject UiInter;
+    public GameObject KUiInter;
     public GameObject Portal;
     GameObject player;
 
@@ -24,7 +25,7 @@ public class Clear1CameraMove : MonoBehaviour
     public GameObject option;
     bool checkEnemy = false;
     public GameObject hpBar;
-    public GameObject mpBar;
+
     void Start()
     {
         player = GameObject.Find("Player");
@@ -83,10 +84,14 @@ public class Clear1CameraMove : MonoBehaviour
                     {
                         UiInter.SetActive(false);
                     }
+                    else
+                    {
+                        KUiInter.SetActive(false);
+                    }
                     option.SetActive(false);
                     player.SetActive(false);
                     hpBar.SetActive(false);
-                    mpBar.SetActive(false);
+
                     cameraRig.transform.position = Vector3.Lerp(cameraRig.transform.position, transform.position, 1f * Time.deltaTime);
                     cameraRig.transform.rotation = Quaternion.Lerp(cameraRig.transform.rotation, transform.rotation, 1f * Time.deltaTime);
                 }
@@ -115,10 +120,14 @@ public class Clear1CameraMove : MonoBehaviour
         {
             UiInter.SetActive(true);
         }
+        else
+        {
+            KUiInter.SetActive(true);
+        }
         player.SetActive(true);
         option.SetActive(true);
         hpBar.SetActive(true);
-        mpBar.SetActive(true);
+
         cameraRig.transform.position = originPos;
             cameraRig.transform.rotation = originRot;
             startCameraMove = false;

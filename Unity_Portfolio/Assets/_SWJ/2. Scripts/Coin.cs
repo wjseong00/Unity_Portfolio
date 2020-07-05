@@ -7,10 +7,12 @@ public class Coin : MonoBehaviour
    
     Rigidbody rig;
     GameObject player;
+    
     float explosion = 250f;
     // Start is called before the first frame update
     void Start()
     {
+        
         rig = GetComponent<Rigidbody>();
         rig.AddForce(Vector3.up * explosion);
         player = GameObject.Find("Player");
@@ -22,6 +24,7 @@ public class Coin : MonoBehaviour
         {
             if(cols[i].tag=="Player")
             {
+                
                 ItemDatabase.instance.money += 100;
                 Destroy(gameObject);
             }

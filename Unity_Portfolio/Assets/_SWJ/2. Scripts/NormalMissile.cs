@@ -9,14 +9,18 @@ public class NormalMissile : MonoBehaviour
     Vector3 dir;
     Vector3 target;
     float minDistance = 9999f;
-
+    AudioSource sound;
     float curTime = 0;
     float limitTime = 2;
-    
-    
+
+    private void Start()
+    {
+        sound = GetComponent<AudioSource>();
+    }
     // Update is called once per frame
     void Update()
     {
+        sound.volume = SoundManager.instance.efVolume;
         minDistance = 9999f;
         curTime += Time.deltaTime;
        if(curTime>limitTime)

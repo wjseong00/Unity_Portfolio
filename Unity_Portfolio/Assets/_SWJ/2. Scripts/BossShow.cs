@@ -4,24 +4,26 @@ using UnityEngine;
 
 public class BossShow : MonoBehaviour
 {
-   
+    public static BossShow instance;
 
-    void Start()
+    private void Awake()
     {
- 
+        if (instance != null)
+        {
+            Destroy(gameObject);
+            return;
+        }
+        instance = this;
     }
+    public bool bossStart = false;
 
 
     
-    void Update()
-    {
-        
-    }
     private void OnTriggerEnter(Collider other)
     {
         if(other.tag == "Player")
         {
-            
+            bossStart = true;
             Inventory.instance.bossShow = true;
            GetComponent<FadeIn>().enabled = true;
             

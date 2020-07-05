@@ -12,6 +12,7 @@ public class FrostMissile : MonoBehaviour
     
     void Start()
     {
+        
         player = GameObject.Find("Player");
         boss = GameObject.Find("Boss");
         origin = transform.position;
@@ -20,6 +21,7 @@ public class FrostMissile : MonoBehaviour
 
     void Update()
     {
+        
         Vector3 dir = (player.transform.position - transform.position).normalized;
         dir.y = 0;
         transform.Translate(dir * speed * Time.deltaTime);
@@ -28,9 +30,10 @@ public class FrostMissile : MonoBehaviour
         Destroy(gameObject,13f);
         
     }
-    private void OnCollisionEnter(Collision collision)
+    
+    private void OnTriggerEnter(Collider other)
     {
-        if(collision.gameObject.tag=="Player")
+        if (other.gameObject.tag == "Player")
         {
             Destroy(gameObject);
             player.GetComponent<PlayerDamage>().hitDamage(10);
@@ -40,8 +43,8 @@ public class FrostMissile : MonoBehaviour
             Destroy(bomb, 1f);
 
         }
-        
-        if(collision.gameObject.tag == "Enemy")
+
+        if (other.gameObject.tag == "Enemy")
         {
             Destroy(gameObject);
             boss.GetComponent<BossCtrl>().Damaged(10);
@@ -49,6 +52,5 @@ public class FrostMissile : MonoBehaviour
             bomb.transform.position = transform.position;
             Destroy(bomb, 1f);
         }
-            
     }
 }

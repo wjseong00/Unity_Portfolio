@@ -8,19 +8,23 @@ public class FireBall : MonoBehaviour
     float speed = 20.0f;
     //카메라흔들기
     private Shake shake;
+    private AudioSource sound;
     void Start()
     {
         shake = GameObject.Find("CameraRig").GetComponent<Shake>();
+        sound = GetComponent<AudioSource>();
     }
 
     void Update()
     {
+        sound.volume = SoundManager.instance.efVolume;
         transform.Translate(Vector3.forward * speed * Time.deltaTime);
     }
     private void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.name.Contains("Witch"))
         {
+            
             EnemyFSM ef = collision.gameObject.GetComponent<EnemyFSM>();
             ef.hitDamage(Random.Range(5,11)+GameObject.Find("Player").GetComponent<PlayerAttack>().att);
         }

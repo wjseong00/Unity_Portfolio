@@ -22,7 +22,7 @@ public class PlayerMove : MonoBehaviour
     private Animator anim;
     private AnimatorStateInfo currentBaseState;
     private GameObject cameraObject;
-
+    public AudioSource sound;
     public bool isJumpBar = false;
     float h = 0f;
    float v = 0f;
@@ -37,6 +37,7 @@ public class PlayerMove : MonoBehaviour
 
     void Start()
     {
+        
         anim = GetComponent<Animator>();
         cc = GetComponent<CharacterController>();
         cameraObject = GameObject.FindWithTag("MainCamera");
@@ -64,18 +65,23 @@ public class PlayerMove : MonoBehaviour
             var ray = new Ray(this.transform.position + Vector3.up * 0.1f, Vector3.down);
             var maxDistance = 0.25f;
             Debug.DrawRay(transform.position + Vector3.up * 0.1f, Vector3.down * maxDistance, Color.red);
-            if (Physics.Raycast(ray,maxDistance,1<<8))
+            RaycastHit hitInfo;
+            if (Physics.Raycast(ray,out hitInfo , maxDistance,1<<8))
             {
-                anim.SetBool("Jump", false);
-                velocityY = 0;
-                jumpCount = 0;
+                if(hitInfo.collider.CompareTag("Ground"))
+                {
+                    anim.SetBool("Jump", false);
+                    velocityY = 0;
+                    jumpCount = 0;
+                }
+                
             }
             
             if(Imotal.instance.isKeyBorad==true)
             {
                 if (Input.GetButtonDown("Jump") && jumpCount < 2)
                 {
-
+                    sound.Play();
                     anim.SetBool("Jump", true);
                     jumpCount++;
                     velocityY = jumpSpeed;
@@ -93,7 +99,7 @@ public class PlayerMove : MonoBehaviour
     {
         if (jumpCount < 2)
         {
-
+            sound.Play();
             anim.SetBool("Jump", true);
             jumpCount++;
             velocityY = jumpSpeed;

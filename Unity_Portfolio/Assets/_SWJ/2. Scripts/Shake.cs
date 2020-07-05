@@ -17,11 +17,7 @@ public class Shake : MonoBehaviour
         originRot = shakeCamera.localRotation;
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    
     public IEnumerator ShakeCamera(float duration = 0.05f, float magnitudePos = 0.15f, float magnitudeRot = 0.4f)
     {
         float passTime = 0.0f;

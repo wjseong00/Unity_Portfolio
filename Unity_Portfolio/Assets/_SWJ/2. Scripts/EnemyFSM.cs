@@ -63,8 +63,8 @@ public class EnemyFSM : MonoBehaviour
     
 
     //몬스터 일반변수
-    float hp = 100f;//체력
-    float initHp = 100f;
+    float hp = 20f;//체력
+    float initHp = 20f;
     int att = 5;//공격력
     float speed = 5.0f;//이동속도
 
