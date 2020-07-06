@@ -9,6 +9,7 @@ public class GoldenBox : MonoBehaviour
     Animation anim;
     AudioSource sound;
     bool isOpen = false;
+    bool isNear = false;
     void Start()
     {
         player = GameObject.Find("Player");
@@ -22,6 +23,7 @@ public class GoldenBox : MonoBehaviour
         {
             if (cols[i].tag == "Player")
             {
+                isNear = true;
                 if (player.GetComponent<PlayerMoney>().isKey == true)
                 {
                    
@@ -39,9 +41,24 @@ public class GoldenBox : MonoBehaviour
                 }
                 
             }
+            else
+            {
+                isNear = false;
+            }
         }
     }
-    
+    public void openBox()
+    {
+        if (!isOpen&&isNear)
+        {
+            sound.Play();
+            isOpen = true;
+            anim.Play();
+            GameObject item = Instantiate(itemFactory);
+            item.transform.position = transform.position + new Vector3(0, 1f, 0);
+            Invoke("closeBox", 0.8f);
+        }
+    }
     void closeBox()
     {
         anim.Stop();

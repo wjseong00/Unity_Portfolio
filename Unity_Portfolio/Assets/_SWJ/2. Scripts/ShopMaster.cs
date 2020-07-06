@@ -8,6 +8,13 @@ public class ShopMaster : MonoBehaviour
     public GameObject Ui;
     public GameObject KUi;
     public GameObject hpBar;
+    GameObject player;
+    GameObject cameraRig;
+    private void Start()
+    {
+        player = GameObject.Find("Player");
+        cameraRig = GameObject.Find("CameraRig");
+    }
     private void Update()
     {
         if(Imotal.instance.isKeyBorad==true)
@@ -21,7 +28,12 @@ public class ShopMaster : MonoBehaviour
                         if (Imotal.instance.isKeyBorad == true)
                         {
                             KUi.SetActive(false);
+                            Cursor.visible = true;
                         }
+                        
+                        cameraRig.GetComponent<FollowCam>().enabled = false;
+                        player.GetComponent<PlayerMove>().enabled = false;
+                        player.GetComponent<PlayerAttack>().enabled = false;
                         hpBar.SetActive(false);
                         Time.timeScale = 0;
                         speak.SetActive(false);
@@ -43,14 +55,19 @@ public class ShopMaster : MonoBehaviour
                 {
                     if (Imotal.instance.isKeyBorad == false)
                     {
+                    
                         Ui.SetActive(false);
                     }
-                    
-                       
+                    else
+                    {
+                        Cursor.visible = true;
+                    }
 
-                    
-                Time.timeScale = 0;
-                hpBar.SetActive(false);
+
+
+                
+                    Time.timeScale = 0;
+                    hpBar.SetActive(false);
                     speak.SetActive(false);
                     GameObject.Find("Inventory Canvas").GetComponent<InventoryUI>().OpenStore();
 

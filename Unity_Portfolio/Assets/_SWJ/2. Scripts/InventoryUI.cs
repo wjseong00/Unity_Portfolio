@@ -15,11 +15,14 @@ public class InventoryUI : MonoBehaviour
     public GameObject Ui;
     public GameObject KUi;
 
-
+    GameObject player;
+    GameObject cameraRig;
     public GameObject hpBar;
     public GameObject speak;
     private void Start()
     {
+        player = GameObject.Find("Player");
+        cameraRig = GameObject.Find("CameraRig");
         inven = Inventory.instance;
         slots = slotHolder.GetComponentsInChildren<Slot>();
         shopSlots = shopHolder.GetComponentsInChildren<ShopSlot>();
@@ -64,17 +67,27 @@ public class InventoryUI : MonoBehaviour
 
     private void Update()
     {
-        if(Input.GetKeyDown(KeyCode.I) &&!isStoreActive)
+        if(Imotal.instance.isKeyBorad==true)
         {
+            if (Input.GetKeyDown(KeyCode.I) && !isStoreActive)
+            {
+                Cursor.visible = !activeInventory;
+                activeInventory = !activeInventory;
+                inventoryPanel.SetActive(activeInventory);
+            }
+        }
+        
+    }
+    public void openInven()
+    {
+        if (!isStoreActive)
+        {
+            
             activeInventory = !activeInventory;
             inventoryPanel.SetActive(activeInventory);
         }
     }
-
-    public void AddSlot()
-    {
-        inven.SlotCnt++;
-    }
+    
 
     
     public GameObject shop;
@@ -118,11 +131,16 @@ public class InventoryUI : MonoBehaviour
         }
         else
         {
+            Cursor.visible = false;
             KUi.SetActive(true);
         }
         Time.timeScale = 1;
+        
         speak.SetActive(true);
         hpBar.SetActive(true);
+        player.GetComponent<PlayerMove>().enabled = true;
+        player.GetComponent<PlayerAttack>().enabled = true;
+        cameraRig.GetComponent<FollowCam>().enabled = true;
         ActiveShop(false);
         shopData = null;
         for (int i = 0; i < shopSlots.Length; i++)

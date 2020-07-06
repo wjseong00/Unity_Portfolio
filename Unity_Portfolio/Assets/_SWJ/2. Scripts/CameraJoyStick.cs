@@ -47,7 +47,13 @@ public class CameraJoyStick : MonoBehaviour, IPointerDownHandler, IPointerUpHand
     {
         isTouch = true;
     }
-
+    public void Reset()
+    {
+        isTouch = false;
+        rect_Jonstick.localPosition = Vector3.zero;
+        value = Vector2.zero;
+        movePosition = Vector3.zero;
+    }
     public void OnPointerUp(PointerEventData eventData)
     {
         isTouch = false;

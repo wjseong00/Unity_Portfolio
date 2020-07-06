@@ -228,7 +228,7 @@ public class PlayerAttack : MonoBehaviour
         {
             if (mp > 1)
             {
-
+               
                 mp -= 1;
                 //anim.SetBool("NormalAttack", true);
                 anim.SetTrigger("Attack");

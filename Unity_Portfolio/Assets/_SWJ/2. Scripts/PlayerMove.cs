@@ -26,7 +26,7 @@ public class PlayerMove : MonoBehaviour
     public bool isJumpBar = false;
     float h = 0f;
    float v = 0f;
-
+    bool isJump = false;
     bool stun = false;
     public float slowTime =10f;
 
@@ -37,7 +37,7 @@ public class PlayerMove : MonoBehaviour
 
     void Start()
     {
-        
+        Cursor.visible = false;
         anim = GetComponent<Animator>();
         cc = GetComponent<CharacterController>();
         cameraObject = GameObject.FindWithTag("MainCamera");
@@ -46,6 +46,10 @@ public class PlayerMove : MonoBehaviour
     
     void Update()
     {
+        if(transform.position.y<-5)
+        {
+            transform.position = startPoint.transform.position;
+        }
         if(!stun)
         {
             if(isJumpBar)
@@ -61,6 +65,7 @@ public class PlayerMove : MonoBehaviour
                 anim.SetBool("Jump", false);
                 velocityY = 0;
                 jumpCount = 0;
+                isJump = false;
             }
             var ray = new Ray(this.transform.position + Vector3.up * 0.1f, Vector3.down);
             var maxDistance = 0.25f;
@@ -73,6 +78,7 @@ public class PlayerMove : MonoBehaviour
                     anim.SetBool("Jump", false);
                     velocityY = 0;
                     jumpCount = 0;
+                    isJump = false;
                 }
                 
             }
@@ -85,6 +91,7 @@ public class PlayerMove : MonoBehaviour
                     anim.SetBool("Jump", true);
                     jumpCount++;
                     velocityY = jumpSpeed;
+                    
 
                 }
 
@@ -100,12 +107,12 @@ public class PlayerMove : MonoBehaviour
         if (jumpCount < 2)
         {
             sound.Play();
+            isJump = true;
             anim.SetBool("Jump", true);
             jumpCount++;
             velocityY = jumpSpeed;
-            velocityY += gravity * Time.deltaTime;
             velocity.y = velocityY;
-            cc.Move(velocity * frontSpeed * Time.deltaTime);
+            cc.Move(velocity  * Time.deltaTime);
         }
     }
     private void FixedUpdate()
@@ -129,9 +136,7 @@ public class PlayerMove : MonoBehaviour
             anim.speed = aniSpeed;
             currentBaseState = anim.GetCurrentAnimatorStateInfo(0);
             //rig.useGravity = true;
-
-
-
+            
             velocity = new Vector3(h, 0, v);
 
             velocity = Camera.main.transform.TransformDirection(velocity);
@@ -147,9 +152,13 @@ public class PlayerMove : MonoBehaviour
                 anim.SetBool("Run", true);
                 transform.rotation = Quaternion.LookRotation(velocity);
             }
-            velocityY += gravity * Time.deltaTime;
-            velocity.y = velocityY;
-            cc.Move(velocity * frontSpeed * Time.deltaTime);
+            
+                velocityY += gravity * Time.deltaTime;
+                velocity.y = velocityY;
+
+                cc.Move(velocity * frontSpeed * Time.deltaTime);
+            
+            
 
         }
     
@@ -167,6 +176,7 @@ public class PlayerMove : MonoBehaviour
             anim.SetBool("Jump", false);
             velocityY = 0;
             jumpCount = 0;
+            isJump = false;
         }
         
     }
@@ -177,6 +187,7 @@ public class PlayerMove : MonoBehaviour
             anim.SetBool("Jump", false);
             velocityY = 0;
             jumpCount = 0;
+            isJump = false;
         }
     }
 }

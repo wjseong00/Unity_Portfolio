@@ -53,7 +53,7 @@ public class JoyStick : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, I
 
         float distance = Vector2.Distance(rect_Background.position, rect_Jonstick.position) / radius;
         value = value.normalized;
-        movePosition = new Vector3(value.x *distance* moveSpeed * Time.deltaTime, 0.0f, value.y * distance * moveSpeed * Time.deltaTime);
+        movePosition = new Vector3(value.x *distance * Time.deltaTime, 0.0f, value.y * distance  * Time.deltaTime);
         movePosition = Camera.main.transform.TransformDirection(movePosition);
         movePosition.y = 0;
     }

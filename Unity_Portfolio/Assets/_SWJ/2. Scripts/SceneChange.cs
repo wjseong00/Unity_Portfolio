@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEditor;
 public class SceneChange : MonoBehaviour
 {
     public void gameStart()
@@ -10,7 +11,8 @@ public class SceneChange : MonoBehaviour
     }
     public void gameExit()
     {
-        UnityEditor.EditorApplication.isPlaying = false;
+        
+        //EditorApplication.isPlaying = false;
         Application.Quit();
     }
 }

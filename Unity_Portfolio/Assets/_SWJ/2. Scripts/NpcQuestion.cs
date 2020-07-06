@@ -151,6 +151,7 @@ public class NpcQuestion : MonoBehaviour
         }
         else
         {
+            Cursor.visible = false;
             KUiInter.SetActive(true);
         }
         cameraRig.GetComponent<FollowCam>().enabled = true;
@@ -176,6 +177,7 @@ public class NpcQuestion : MonoBehaviour
         }
         else
         {
+            Cursor.visible = false;
             KUiInter.SetActive(true);
         }
 
@@ -222,6 +224,7 @@ public class NpcQuestion : MonoBehaviour
     {
         OnOFF(false);
         isUse = false;
+        
         hpBar.SetActive(true);
         Time.timeScale = 1f;
         player.SetActive(true);
@@ -231,6 +234,7 @@ public class NpcQuestion : MonoBehaviour
         }
         else
         {
+            Cursor.visible = false;
             KUiInter.SetActive(true);
         }
         cameraRig.GetComponent<FollowCam>().enabled = true;
@@ -271,6 +275,7 @@ public class NpcQuestion : MonoBehaviour
                     {
                         KUiInter.SetActive(false);
                     }
+                    Cursor.visible = true;
                     player.SetActive(false);
                     speak.SetActive(false);
                     Camera.main.transform.position = camPos.transform.position;

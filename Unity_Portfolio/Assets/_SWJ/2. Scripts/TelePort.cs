@@ -48,6 +48,17 @@ public class TelePort : MonoBehaviour
         }
         
     }
+    public void onTelePort()
+    {
+        if (isTelePort && ready)
+        {
+            
+            player.transform.position = otherTelePort.transform.position;
+            isTelePort = false;
+            
+
+        }
+    }
     private void OnTriggerEnter(Collider other)
     {
         if(other.tag=="Player")

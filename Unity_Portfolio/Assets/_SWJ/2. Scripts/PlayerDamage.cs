@@ -15,6 +15,11 @@ public class PlayerDamage : MonoBehaviour
     public bool isFire = false;
     public bool isFreeze = false;
     public bool isDie = false;
+    public void updateHp()
+    {
+        hpBar.fillAmount = hp / initHp;
+
+    }
     private void Start()
     {
         anim=GetComponent<Animator>();
@@ -128,7 +133,10 @@ public class PlayerDamage : MonoBehaviour
                 Die();
             }
         }
-        
+        if(hp>100)
+        {
+            hp = 100;
+        }
 
     }
     public void fire(bool _fire)

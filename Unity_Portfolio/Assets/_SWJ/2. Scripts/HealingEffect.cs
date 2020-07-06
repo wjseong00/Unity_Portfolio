@@ -12,6 +12,7 @@ public class HealingEffect : ItemEffect
     {
         
         GameObject.Find("Player").GetComponent<PlayerDamage>().hp += healingPoint;
+        GameObject.Find("Player").GetComponent<PlayerDamage>().updateHp();
         return true;
     }
 }

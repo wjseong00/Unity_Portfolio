@@ -13,7 +13,8 @@ public class Clear3CameraMove : MonoBehaviour
     public GameObject[] bridge;
     public GameObject smokeFactory;
     GameObject player;
-
+    public GameObject joyStick;
+    public GameObject joyStick2;
     public bool startCameraMove = false;
     public bool endCameraMove = false;
     bool setMainPos = false;
@@ -97,7 +98,9 @@ public class Clear3CameraMove : MonoBehaviour
                     option.SetActive(false);
                     player.SetActive(false);
                     hpBar.SetActive(false);
-                     cameraRig.transform.position = Vector3.Lerp(cameraRig.transform.position, transform.position, 1f * Time.deltaTime);
+                    joyStick.GetComponent<JoyStick>().Reset();
+                    joyStick2.GetComponent<CameraJoyStick>().Reset();
+                    cameraRig.transform.position = Vector3.Lerp(cameraRig.transform.position, transform.position, 1f * Time.deltaTime);
                     cameraRig.transform.rotation = Quaternion.Lerp(cameraRig.transform.rotation, transform.rotation, 1f * Time.deltaTime);
                 }
             }

@@ -12,7 +12,8 @@ public class Clear1CameraMove : MonoBehaviour
     public GameObject KUiInter;
     public GameObject Portal;
     GameObject player;
-
+    public GameObject joyStick;
+    public GameObject joyStick2;
     public bool startCameraMove = false;
     public bool endCameraMove = false;
     bool setMainPos = false;
@@ -91,7 +92,8 @@ public class Clear1CameraMove : MonoBehaviour
                     option.SetActive(false);
                     player.SetActive(false);
                     hpBar.SetActive(false);
-
+                    joyStick.GetComponent<JoyStick>().Reset();
+                    joyStick2.GetComponent<CameraJoyStick>().Reset();
                     cameraRig.transform.position = Vector3.Lerp(cameraRig.transform.position, transform.position, 1f * Time.deltaTime);
                     cameraRig.transform.rotation = Quaternion.Lerp(cameraRig.transform.rotation, transform.rotation, 1f * Time.deltaTime);
                 }
@@ -124,6 +126,7 @@ public class Clear1CameraMove : MonoBehaviour
         {
             KUiInter.SetActive(true);
         }
+
         player.SetActive(true);
         option.SetActive(true);
         hpBar.SetActive(true);
